@@ -1,7 +1,19 @@
 
 import UIKit
 
+protocol TrackersCollectionViewCellDelegate: AnyObject {
+    func completeTracker(id: UUID)
+    func noCompleteTracker(id: UUID)
+}
+
 final class TrackersCollectionViewCell: UICollectionViewCell {
+    
+    static let reuseIdentifier = "TrackerCell"
+    weak var delegate: TrackersCollectionViewCellDelegate?
+    
+    var isCompleted: Bool?
+    var trackerID: UUID?
+    var indexPath: IndexPath?
     
     private var trackerNameLabel: UILabel!
     var trackerView: UIView!
@@ -11,11 +23,24 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setupTrackerView()
         setupDoneButton()
         setupTrackerDayLabel()
         setupTrackerNameLabel()
         setupEmojiLabel()
-        setupTrackerView()
+    }
+    
+    @objc private func didTapDoneButton() {
+        guard let isCompleted = isCompleted,
+              let trackerID = trackerID
+        else {
+            return
+        }
+        if isCompleted {
+            delegate?.noCompleteTracker(id: trackerID)
+        } else {
+            delegate?.completeTracker(id: trackerID)
+        }
     }
     
     private func setupTrackerView() {
@@ -80,10 +105,11 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     private func setupDoneButton() {
         doneButton = UIButton()
         doneButton.translatesAutoresizingMaskIntoConstraints = false
-        doneButton.setImage(UIImage(named: "plus"), for: .normal)
+        doneButton.tintColor = .white
         doneButton.layer.cornerRadius = 17
         doneButton.layer.masksToBounds = true
         doneButton.contentMode = .center
+        doneButton.addTarget(self, action: #selector(didTapDoneButton), for: .touchUpInside)
         contentView.addSubview(doneButton)
         
         NSLayoutConstraint.activate([
@@ -92,6 +118,52 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
             doneButton.heightAnchor.constraint(equalToConstant: 34),
             doneButton.widthAnchor.constraint(equalToConstant: 34)
         ])
+    }
+    
+    func setupUI(
+        with tracker: Tracker,
+        isCompletedToday: Bool,
+        completedDays: Int,
+        indexPath: IndexPath
+    ) {
+        self.trackerID = tracker.id
+        self.isCompleted = isCompletedToday
+        self.indexPath = indexPath
+        
+        trackerView.backgroundColor = tracker.color
+        emojiLabel.text = tracker.emoji
+        trackerNameLabel.text = tracker.name
+        updateTrackerDayLabel(completedDays: completedDays)
+        
+        let image = isCompleted! ? UIImage(systemName: "checkmark") : UIImage(systemName: "plus")
+        let imageView = UIImageView(image: image)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        doneButton.backgroundColor = isCompletedToday ? tracker.color.withAlphaComponent(0.3) : tracker.color
+        trackerNameLabel.backgroundColor = tracker.color
+        for view in self.doneButton.subviews {
+            view.removeFromSuperview()
+        }
+        doneButton.addSubview(imageView)
+        
+        NSLayoutConstraint.activate([
+            imageView.centerXAnchor.constraint(equalTo: doneButton.centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: doneButton.centerYAnchor)
+        ])
+    }
+    
+    private func updateTrackerDayLabel(completedDays: Int) {
+        let daysText: String
+        
+        switch completedDays {
+        case 1:
+            daysText = "день"
+        case 2...4:
+            daysText = "дня"
+        default:
+            daysText = "дней"
+        }
+        trackerDayLabel.text = "\(completedDays) \(daysText)"
     }
     
     required init?(coder: NSCoder) {
