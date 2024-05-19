@@ -9,7 +9,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
     private var mainLabel: UILabel!
     private var starImageView: UIImageView!
     private var whatsUpLabel: UILabel!
-    private var searchTextField: UISearchTextField!
+    private var searchBar: UISearchController!
     private var collectionView: UICollectionView!
     private var noResultImageView: UIImageView!
     private var noResultLabel: UILabel!
@@ -23,19 +23,15 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupUI()
-        noResultLabel.isHidden = true
-        noResultImageView.isHidden = true
         currentDate = Date()
         filterVisibleCategories(for: currentDate)
         emptyCollectionView()
         emptySearchCollectionView()
         datePicker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
-        searchTextField.clearButtonMode = .always
-        searchTextField.addTarget(self, action: #selector(textFieldCleared), for: .editingChanged)
         tapGesture()
         collectionView.delegate = self
         collectionView.dataSource = self
-        searchTextField.delegate = self
+        searchBar.searchBar.delegate = self
     }
     
     @objc private func dateChanged(_ picker: UIDatePicker) {
@@ -57,8 +53,8 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         present(addNewTrackerNavigationController, animated: true)
     }
     
-    @objc private func searchTrackers() {
-        guard let searchText = searchTextField.text, !searchText.isEmpty else {
+    @objc private func searchTrackers(_ searchBar: UISearchBar) {
+        guard let searchText = searchBar.text, !searchText.isEmpty else {
             filterVisibleCategories(for: currentDate)
             return
         }
@@ -70,6 +66,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
             }
             return filteredTrackers.isEmpty ? nil : TrackerCategory(title: category.title, trackers: filteredTrackers)
         }
+        
         if visibleCategories.isEmpty {
             showNoResultImage()
             hideStarImage()
@@ -80,8 +77,8 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         collectionView.reloadData()
     }
     
-    @objc private func textFieldCleared() {
-        if searchTextField.text?.isEmpty ?? true {
+    @objc private func textFieldCleared(_ searchBar: UISearchBar) {
+        if searchBar.text?.isEmpty ?? true {
             filterVisibleCategories(for: currentDate)
             if visibleCategories.isEmpty {
                 showStarImage()
@@ -98,7 +95,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
     
     private func setupUI() {
         setupMainLabel()
-        setupSearchTextField()
+        setupSearchBar()
         setupCollectionView()
         setupStarImageView()
         setupWhatsUpLabel()
@@ -125,6 +122,9 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
     }
     
     private func setupNavigationBar() {
+        guard let navigatorBar = navigationController?.navigationBar else { return }
+        navigationItem.hidesSearchBarWhenScrolling = false
+        navigatorBar.prefersLargeTitles = true
         let plusImage = UIImage(named: "plus")
         let plusButton = UIBarButtonItem(
             image: plusImage,
@@ -132,24 +132,19 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
             target: self,
             action: #selector(plusButtonDidTap))
         plusButton.tintColor = .black
+        navigationItem.searchController = searchBar
+        
         navigationItem.leftBarButtonItem = plusButton
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
+        searchBar.searchBar.delegate = self
     }
     
-    private func setupSearchTextField() {
-        searchTextField = UISearchTextField()
-        searchTextField.translatesAutoresizingMaskIntoConstraints = false
-        searchTextField.placeholder = "Поиск"
-        searchTextField.font = UIFont.systemFont(ofSize: 17)
-        searchTextField.addTarget(self, action: #selector(searchTrackers), for: .allEvents)
-        view.addSubview(searchTextField)
-        
-        NSLayoutConstraint.activate([
-            searchTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            searchTextField.topAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: 7),
-            searchTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            searchTextField.heightAnchor.constraint(equalToConstant: 36)
-        ])
+    private func setupSearchBar() {
+        searchBar = UISearchController(searchResultsController: nil)
+        searchBar.hidesNavigationBarDuringPresentation = false
+        searchBar.searchBar.placeholder = "Поиск"
+        searchBar.searchBar.searchTextField.clearButtonMode = .never
+        searchBar.searchBar.setValue("Отмена", forKey: "cancelButtonText")
     }
     
     private func setupCollectionView() {
@@ -163,7 +158,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         view.addSubview(collectionView)
         
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: 10),
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
@@ -189,8 +184,8 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
     }
     
     private func setupStarImageView() {
-        let starView = UIImage(named: "Star")
-        starImageView = UIImageView(image: starView)
+        starImageView = UIImageView()
+        starImageView.image = UIImage(named: "Star")
         starImageView.frame = CGRect(x: 0, y: 0, width: 80, height: 80)
         starImageView.center = view.center
         view.addSubview(starImageView)
@@ -219,7 +214,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         view.addSubview(noResultImageView)
         
         NSLayoutConstraint.activate([
-            noResultImageView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
+            noResultImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             noResultImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             noResultImageView.widthAnchor.constraint(equalToConstant: 80),
             noResultImageView.heightAnchor.constraint(equalToConstant: 80)
@@ -260,8 +255,12 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         noResultLabel.isHidden = true
     }
     
+    private func isMatchingRecord(model: TrackerRecord, with trackerId: UUID) -> Bool {
+        return model.id == trackerId && Calendar.current.isDate(model.date, inSameDayAs: currentDate)
+    }
+    
     private func emptyCollectionView() {
-        if visibleCategories.isEmpty && searchTextField.text?.isEmpty ?? true {
+        if visibleCategories.isEmpty && (searchBar.searchBar.text?.isEmpty ?? true) {
             showStarImage()
             hideNoResultImage()
         } else {
@@ -270,16 +269,12 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
     }
     
     private func emptySearchCollectionView() {
-        if visibleCategories.isEmpty && !(searchTextField.text?.isEmpty ?? true) {
+        if visibleCategories.isEmpty && !(searchBar.searchBar.text?.isEmpty ?? true) {
             showNoResultImage()
             hideStarImage()
         } else {
             hideNoResultImage()
         }
-    }
-    
-    private func isMatchingRecord(model: TrackerRecord, with trackerId: UUID) -> Bool {
-        return model.id == trackerId && Calendar.current.isDate(model.date, inSameDayAs: currentDate)
     }
     
     private func filterVisibleCategories(for selectedDate: Date) {
@@ -394,10 +389,13 @@ extension TrackersViewController: TrackersViewControllerDelegate {
     }
 }
 
-extension TrackersViewController: UISearchTextFieldDelegate {
-    private func searchTextFieldShouldReturn(_ textField: UISearchTextField) -> Bool {
-        textField.resignFirstResponder()
-        hideNoResultImage()
-        return true
+extension TrackersViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        searchTrackers(searchBar)
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = ""
+        textFieldCleared(searchBar)
     }
 }
