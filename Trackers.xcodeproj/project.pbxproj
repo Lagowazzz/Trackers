@@ -14,6 +14,7 @@
 		69705AE92BF9A0E200521FBE /* TrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69705AE82BF9A0E200521FBE /* TrackersViewController.swift */; };
 		69705AEB2BF9A27F00521FBE /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69705AEA2BF9A27F00521FBE /* TabBarController.swift */; };
 		69705AED2BF9A30100521FBE /* StatisticViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69705AEC2BF9A30100521FBE /* StatisticViewController.swift */; };
+		69705AF02BF9A4F700521FBE /* AddNewTrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69705AEF2BF9A4F700521FBE /* AddNewTrackerViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		69705AE82BF9A0E200521FBE /* TrackersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewController.swift; sourceTree = "<group>"; };
 		69705AEA2BF9A27F00521FBE /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		69705AEC2BF9A30100521FBE /* StatisticViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticViewController.swift; sourceTree = "<group>"; };
+		69705AEF2BF9A4F700521FBE /* AddNewTrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewTrackerViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +76,7 @@
 			children = (
 				69705AE82BF9A0E200521FBE /* TrackersViewController.swift */,
 				69705AEA2BF9A27F00521FBE /* TabBarController.swift */,
+				69705AEF2BF9A4F700521FBE /* AddNewTrackerViewController.swift */,
 			);
 			path = MainScreen;
 			sourceTree = "<group>";
@@ -160,6 +163,7 @@
 				69705AD42BF99D1700521FBE /* AppDelegate.swift in Sources */,
 				69705AED2BF9A30100521FBE /* StatisticViewController.swift in Sources */,
 				69705AEB2BF9A27F00521FBE /* TabBarController.swift in Sources */,
+				69705AF02BF9A4F700521FBE /* AddNewTrackerViewController.swift in Sources */,
 				69705AD62BF99D1700521FBE /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
