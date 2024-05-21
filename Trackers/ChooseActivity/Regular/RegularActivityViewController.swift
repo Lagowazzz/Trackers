@@ -5,23 +5,77 @@ final class RegularActivityViewController: UIViewController {
     weak var delegate: AddNewTrackerViewControllerDelegate?
     private var weekTableViewController: WeekTableViewController?
     
-    private var trackerName: UITextField!
-    private var tableView: UITableView!
-    private var cancelButton: UIButton!
-    private var createButton: UIButton!
-    private var stackView: UIStackView!
     private let cellsTableView = ["Категория", "Расписание"]
     private var selectedWeekTable: [WeekDay] = []
     private var selectedCategory = String()
     
+    private let trackerName: UITextField = {
+        let trackerName = UITextField()
+        trackerName.translatesAutoresizingMaskIntoConstraints = false
+        trackerName.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
+        trackerName.layer.cornerRadius = 16
+        trackerName.layer.masksToBounds = true
+        trackerName.font = UIFont.systemFont(ofSize: 17)
+        trackerName.setupLeftPadding(16)
+        trackerName.placeholder = "Введите название трекера"
+        trackerName.clearButtonMode = .whileEditing
+        trackerName.returnKeyType = .done
+        trackerName.enablesReturnKeyAutomatically = true
+        trackerName.smartInsertDeleteType = .no
+        return trackerName
+    }()
+    
+    private let tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
+        tableView.layer.cornerRadius = 16
+        tableView.layer.masksToBounds = true
+        tableView.register(ActivityCell.self, forCellReuseIdentifier: ActivityCell.reuseIdentifier)
+        return tableView
+    }()
+    
+    private let stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .horizontal
+        stackView.spacing = 8
+        stackView.distribution = .fillEqually
+        return stackView
+    }()
+    
+    private lazy var cancelButton: UIButton = {
+        let cancelButton = UIButton()
+        cancelButton.translatesAutoresizingMaskIntoConstraints = false
+        cancelButton.backgroundColor = .white
+        cancelButton.setTitleColor(UIColor(red: 245/255, green: 107/255, blue: 108/255, alpha: 1), for: .normal)
+        cancelButton.setTitle("Отменить", for: .normal)
+        cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        cancelButton.layer.cornerRadius = 16
+        cancelButton.layer.masksToBounds = true
+        cancelButton.layer.borderColor = UIColor.red.cgColor
+        cancelButton.layer.borderWidth = 1
+        cancelButton.addTarget(self, action: #selector(cancelButtonDidTap), for: .touchUpInside)
+        return cancelButton
+    }()
+    
+    private lazy var createButton: UIButton = {
+        let createButton = UIButton()
+        createButton.translatesAutoresizingMaskIntoConstraints = false
+        createButton.backgroundColor = .black
+        createButton.setTitleColor(.white, for: .normal)
+        createButton.setTitle("Создать", for: .normal)
+        createButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        createButton.layer.cornerRadius = 16
+        createButton.layer.masksToBounds = true
+        createButton.addTarget(self, action: #selector(createButtonDidTap), for: .touchUpInside)
+        return createButton
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        setupTrackerName()
-        setupTableView()
-        setupStackView()
-        setupCancelButton()
-        setupCreateButton()
+        setupConstraints()
         setupNavBar()
         createButton.isEnabled = false
         createButton.backgroundColor = UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1)
@@ -47,86 +101,29 @@ final class RegularActivityViewController: UIViewController {
         dismiss(animated: true)
     }
     
-    private func setupTrackerName() {
-        trackerName = UITextField()
-        trackerName.translatesAutoresizingMaskIntoConstraints = false
-        trackerName.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
-        trackerName.layer.cornerRadius = 16
-        trackerName.layer.masksToBounds = true
-        trackerName.font = UIFont.systemFont(ofSize: 17)
-        trackerName.setupLeftPadding(16)
-        trackerName.placeholder = "Введите название трекера"
-        trackerName.clearButtonMode = .whileEditing
-        trackerName.returnKeyType = .done
-        trackerName.enablesReturnKeyAutomatically = true
-        trackerName.smartInsertDeleteType = .no
+    private func setupConstraints() {
         view.addSubview(trackerName)
+        view.addSubview(tableView)
+        view.addSubview(stackView)
+        stackView.addArrangedSubview(cancelButton)
+        stackView.addArrangedSubview(createButton)
         
         NSLayoutConstraint.activate([
             trackerName.heightAnchor.constraint(equalToConstant: 75),
             trackerName.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             trackerName.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            trackerName.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24)])
-    }
-    
-    private func setupTableView() {
-        tableView = UITableView()
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
-        tableView.layer.cornerRadius = 16
-        tableView.layer.masksToBounds = true
-        tableView.register(ActivityCell.self, forCellReuseIdentifier: ActivityCell.reuseIdentifier)
-        view.addSubview(tableView)
-        
-        NSLayoutConstraint.activate([
+            trackerName.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
+            
             tableView.heightAnchor.constraint(equalToConstant: 150),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            tableView.topAnchor.constraint(equalTo: trackerName.bottomAnchor, constant: 24)])
-    }
-    
-    private func setupStackView() {
-        stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .horizontal
-        stackView.spacing = 8
-        stackView.distribution = .fillEqually
-        view.addSubview(stackView)
-        
-        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: trackerName.bottomAnchor, constant: 24),
+            
             stackView.heightAnchor.constraint(equalToConstant: 60),
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
         ])
-    }
-    
-    private func setupCancelButton() {
-        cancelButton = UIButton()
-        cancelButton.translatesAutoresizingMaskIntoConstraints = false
-        cancelButton.backgroundColor = .white
-        cancelButton.setTitleColor(UIColor(red: 245/255, green: 107/255, blue: 108/255, alpha: 1), for: .normal)
-        cancelButton.setTitle("Отменить", for: .normal)
-        cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        cancelButton.layer.cornerRadius = 16
-        cancelButton.layer.masksToBounds = true
-        cancelButton.layer.borderColor = UIColor.red.cgColor
-        cancelButton.layer.borderWidth = 1
-        cancelButton.addTarget(self, action: #selector(cancelButtonDidTap), for: .touchUpInside)
-        stackView.addArrangedSubview(cancelButton)
-    }
-    
-    private func setupCreateButton() {
-        createButton = UIButton()
-        createButton.translatesAutoresizingMaskIntoConstraints = false
-        createButton.backgroundColor = .black
-        createButton.setTitleColor(.white, for: .normal)
-        createButton.setTitle("Создать", for: .normal)
-        createButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        createButton.layer.cornerRadius = 16
-        createButton.layer.masksToBounds = true
-        createButton.addTarget(self, action: #selector(createButtonDidTap), for: .touchUpInside)
-        stackView.addArrangedSubview(createButton)
     }
     
     private func setupNavBar() {
