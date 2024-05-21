@@ -2,51 +2,51 @@ import UIKit
 
 final class StatisticViewController: UIViewController {
     
-    private var nothingView: UIImageView!
-    private var nothingLabel: UILabel!
-    private var statisticLabel: UILabel!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupStatisticLabel()
-        setupNothingView()
-        setupNothingLabel()
-    }
-    
-    private func setupStatisticLabel() {
-        statisticLabel = UILabel()
+    private let statisticLabel: UILabel = {
+        let statisticLabel = UILabel()
         statisticLabel.text = "Статистика"
         statisticLabel.font = .boldSystemFont(ofSize: 34)
         statisticLabel.textColor = .black
         statisticLabel.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(statisticLabel)
-        
-        NSLayoutConstraint.activate([
-            statisticLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            statisticLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 88),
-            statisticLabel.widthAnchor.constraint(equalToConstant: 254),
-            statisticLabel.heightAnchor.constraint(equalToConstant: 41)
-        ])
-    }
+        return statisticLabel
+    }()
     
-    private func setupNothingView() {
+    private let nothingView: UIImageView = {
         let nothingImage = UIImage(named: "nothing")
-        nothingView = UIImageView(image: nothingImage)
+        let nothingView = UIImageView(image: nothingImage)
         nothingView.frame = CGRect(x: 0, y: 0, width: 80, height: 80)
-        nothingView.center = view.center
-        view.addSubview(nothingView)
-    }
+        return nothingView
+    }()
     
-    private func setupNothingLabel() {
-        nothingLabel = UILabel()
+    private let nothingLabel: UILabel = {
+        let nothingLabel = UILabel()
         nothingLabel.text = "Анализировать пока нечего"
         nothingLabel.textAlignment = .center
         nothingLabel.textColor = .black
         nothingLabel.font = .systemFont(ofSize: 12)
         nothingLabel.translatesAutoresizingMaskIntoConstraints = false
+        return nothingLabel
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupConstraints()
+    }
+    
+    private func setupConstraints() {
+        
+        view.addSubview(statisticLabel)
+        view.addSubview(nothingView)
         view.addSubview(nothingLabel)
         
+        nothingView.center = view.center
+        
         NSLayoutConstraint.activate([
+            statisticLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            statisticLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 88),
+            statisticLabel.widthAnchor.constraint(equalToConstant: 254),
+            statisticLabel.heightAnchor.constraint(equalToConstant: 41),
+            
             nothingLabel.widthAnchor.constraint(equalToConstant: 343),
             nothingLabel.heightAnchor.constraint(equalToConstant: 18),
             nothingLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
