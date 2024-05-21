@@ -7,8 +7,6 @@ protocol WeekTableViewControllerDelegate: AnyObject {
 
 final class WeekTableViewController: UIViewController {
     
-    private var doneButton: UIButton!
-    private var tableView: UITableView!
     weak var delegate: WeekTableViewControllerDelegate?
     private var selectedWeekTable: [WeekDay] = []
     
@@ -17,13 +15,33 @@ final class WeekTableViewController: UIViewController {
         navigationItem.hidesBackButton = true
     }
     
+    private let tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.layer.cornerRadius = 16
+        tableView.layer.masksToBounds = true
+        tableView.register(CustomTableViewCell.self, forCellReuseIdentifier: CustomTableViewCell.reuseIdentifier)
+        return tableView
+    }()
+    
+    private lazy var doneButton: UIButton = {
+        let doneButton = UIButton()
+        doneButton.translatesAutoresizingMaskIntoConstraints = false
+        doneButton.backgroundColor = .black
+        doneButton.layer.cornerRadius = 16
+        doneButton.layer.masksToBounds = true
+        doneButton.setTitle("Готово", for: .normal)
+        doneButton.setTitleColor(.white, for: .normal)
+        doneButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        doneButton.addTarget(self, action: #selector(didTapDoneButton), for: .touchUpInside)
+        return doneButton
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupNavBar()
-        setupTableView()
-        setupDoneButton()
-        
+        setupConstraints()
         tableView.delegate = self
         tableView.dataSource = self
     }
@@ -34,34 +52,16 @@ final class WeekTableViewController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
-    private func setupTableView() {
-        tableView = UITableView()
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.layer.cornerRadius = 16
-        tableView.layer.masksToBounds = true
-        tableView.register(CustomTableViewCell.self, forCellReuseIdentifier: CustomTableViewCell.reuseIdentifier)
+    private func setupConstraints() {
+        
         view.addSubview(tableView)
+        view.addSubview(doneButton)
         
         NSLayoutConstraint.activate([
             tableView.heightAnchor.constraint(equalToConstant: 525),
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)])
-    }
-    
-    private func setupDoneButton() {
-        doneButton = UIButton()
-        doneButton.translatesAutoresizingMaskIntoConstraints = false
-        doneButton.backgroundColor = .black
-        doneButton.layer.cornerRadius = 16
-        doneButton.layer.masksToBounds = true
-        doneButton.setTitle("Готово", for: .normal)
-        doneButton.setTitleColor(.white, for: .normal)
-        doneButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        doneButton.addTarget(self, action: #selector(didTapDoneButton), for: .touchUpInside)
-        view.addSubview(doneButton)
-        
-        NSLayoutConstraint.activate([
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
             doneButton.heightAnchor.constraint(equalToConstant: 60),
             doneButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
