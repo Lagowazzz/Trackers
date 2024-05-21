@@ -8,13 +8,52 @@ protocol CategoryViewControllerDelegate: AnyObject {
 final class CategoryViewController: UIViewController {
     
     weak var delegate: CategoryViewControllerDelegate?
-    private var tableView: UITableView!
-    private var categoryButton: UIButton!
-    private var starImageView: UIImageView!
-    private var starLabel: UILabel!
     
     private var cellsTableView: [String] = []
     private var selectedCategoryIndex: Int?
+    
+    private let tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.layer.cornerRadius = 16
+        tableView.layer.masksToBounds = true
+        tableView.separatorStyle = .singleLine
+        tableView.tableHeaderView = UIView()
+        tableView.separatorColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
+        tableView.register(CustomTableViewCell.self, forCellReuseIdentifier: CustomTableViewCell.reuseIdentifier)
+        return tableView
+    }()
+    
+    private let starImageView: UIImageView = {
+        let starImageView = UIImageView()
+        starImageView.translatesAutoresizingMaskIntoConstraints = false
+        starImageView.image = UIImage(named: "Star")
+        return starImageView
+    }()
+    
+    private let starLabel: UILabel = {
+        let starLabel = UILabel()
+        starLabel.translatesAutoresizingMaskIntoConstraints = false
+        starLabel.numberOfLines = 2
+        starLabel.text = "Привычки и события можно\nобъединить по смыслу"
+        starLabel.textAlignment = .center
+        starLabel.font = .systemFont(ofSize: 12)
+        starLabel.textColor = .black
+        return starLabel
+    }()
+    
+    private lazy var categoryButton: UIButton = {
+        let categoryButton = UIButton()
+        categoryButton.translatesAutoresizingMaskIntoConstraints = false
+        categoryButton.backgroundColor = .black
+        categoryButton.layer.cornerRadius = 16
+        categoryButton.layer.masksToBounds = true
+        categoryButton.setTitle("Добавить категорию", for: .normal)
+        categoryButton.setTitleColor(.white, for: .normal)
+        categoryButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        categoryButton.addTarget(self, action: #selector(didTapCategoryButton), for: .touchUpInside)
+        return categoryButton
+    }()
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -24,12 +63,8 @@ final class CategoryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        setupCategoryButton()
         setupNavBar()
-        setupTableView()
-        setupStarImageView()
-        setupStarLabel()
-        
+        setupConstraints()
         tableView.delegate = self
         tableView.dataSource = self
     }
@@ -42,67 +77,27 @@ final class CategoryViewController: UIViewController {
         }
     }
     
-    private func setupStarImageView() {
-        starImageView = UIImageView()
-        starImageView.translatesAutoresizingMaskIntoConstraints = false
-        starImageView.image = UIImage(named: "Star")
+    private func setupConstraints() {
+        
         view.addSubview(starImageView)
+        view.addSubview(starLabel)
+        view.addSubview(tableView)
+        view.addSubview(categoryButton)
         
         NSLayoutConstraint.activate([
             starImageView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
             starImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             starImageView.widthAnchor.constraint(equalToConstant: 80),
-            starImageView.heightAnchor.constraint(equalToConstant: 80)])
-    }
-    
-    private func setupStarLabel() {
-        starLabel = UILabel()
-        starLabel.translatesAutoresizingMaskIntoConstraints = false
-        starLabel.numberOfLines = 2
-        starLabel.text = "Привычки и события можно\nобъединить по смыслу"
-        starLabel.textAlignment = .center
-        starLabel.font = .systemFont(ofSize: 12)
-        starLabel.textColor = .black
-        view.addSubview(starLabel)
-        
-        NSLayoutConstraint.activate([
+            starImageView.heightAnchor.constraint(equalToConstant: 80),
+            
             starLabel.topAnchor.constraint(equalTo: starImageView.bottomAnchor, constant: 8),
-            starLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        ])
-    }
-    
-    private func setupTableView() {
-        tableView = UITableView()
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.layer.cornerRadius = 16
-        tableView.layer.masksToBounds = true
-        tableView.separatorStyle = .singleLine
-        tableView.tableHeaderView = UIView()
-        tableView.separatorColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
-        tableView.register(CustomTableViewCell.self, forCellReuseIdentifier: CustomTableViewCell.reuseIdentifier)
-        view.addSubview(tableView)
-        
-        NSLayoutConstraint.activate([
+            starLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
             tableView.heightAnchor.constraint(equalToConstant: 525),
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
-        ])
-    }
-    
-    private func setupCategoryButton() {
-        categoryButton = UIButton()
-        categoryButton.translatesAutoresizingMaskIntoConstraints = false
-        categoryButton.backgroundColor = .black
-        categoryButton.layer.cornerRadius = 16
-        categoryButton.layer.masksToBounds = true
-        categoryButton.setTitle("Добавить категорию", for: .normal)
-        categoryButton.setTitleColor(.white, for: .normal)
-        categoryButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        categoryButton.addTarget(self, action: #selector(didTapCategoryButton), for: .touchUpInside)
-        view.addSubview(categoryButton)
-        
-        NSLayoutConstraint.activate([
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            
             categoryButton.heightAnchor.constraint(equalToConstant: 60),
             categoryButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             categoryButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
