@@ -4,19 +4,23 @@ import UIKit
 final class TrackerSupplementaryView: UICollectionReusableView {
     
     static let reuseIdentifier = "TrackerSupplementaryView"
-    private var titleLabel: UILabel!
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupTitleLabel()
-    }
-    
-    private func setupTitleLabel() {
-        titleLabel = UILabel()
+    private let titleLabel: UILabel = {
+        let titleLabel = UILabel()
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = UIFont.systemFont(ofSize: 19, weight: .bold)
         titleLabel.textColor = .black
         titleLabel.textAlignment = .left
+        return titleLabel
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupConstraints()
+    }
+    
+    private func setupConstraints() {
+        
         addSubview(titleLabel)
         
         NSLayoutConstraint.activate([
