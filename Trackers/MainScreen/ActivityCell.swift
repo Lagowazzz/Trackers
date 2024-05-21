@@ -4,42 +4,42 @@ import UIKit
 final class ActivityCell: UITableViewCell {
     
     static let reuseIdentifier = "ActivityCell"
-    var titleLabel: UILabel!
-    private var subTitleLabel: UILabel!
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupTitleLabel()
-        setupSubtitleLabel()
-    }
-    
-    private func setupTitleLabel() {
-        titleLabel = UILabel()
+    let titleLabel: UILabel = {
+        let titleLabel = UILabel()
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = UIFont.systemFont(ofSize: 17)
         titleLabel.numberOfLines = 0
+        return titleLabel
+    }()
+    
+    private let subTitleLabel: UILabel = {
+        let subTitleLabel = UILabel()
+        subTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        subTitleLabel.font = UIFont.systemFont(ofSize: 17)
+        subTitleLabel.numberOfLines = 0
+        return subTitleLabel
+    }()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupConstraints()
+    }
+    
+    private func setupConstraints() {
         contentView.addSubview(titleLabel)
+        contentView.addSubview(subTitleLabel)
         
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)])
-        titleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
-    }
-    
-    private func setupSubtitleLabel() {
-        subTitleLabel = UILabel()
-        subTitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        subTitleLabel.font = UIFont.systemFont(ofSize: 17)
-        subTitleLabel.numberOfLines = 0
-        contentView.addSubview(subTitleLabel)
-        
-        NSLayoutConstraint.activate([
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             subTitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 2),
             subTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             subTitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            subTitleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -14)
-        ])
+            subTitleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -14)])
+        
+        titleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
         subTitleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
     }
     
