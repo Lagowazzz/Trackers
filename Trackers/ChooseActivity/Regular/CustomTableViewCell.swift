@@ -4,18 +4,22 @@ import UIKit
 final class CustomTableViewCell: UITableViewCell {
     
     static let reuseIdentifier = "CustomTableViewCell"
-    private var customLabel: UILabel!
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupCustomLabel()
-    }
-    
-    private func setupCustomLabel() {
-        customLabel = UILabel()
+    private let customLabel: UILabel = {
+        let customLabel = UILabel()
         customLabel.translatesAutoresizingMaskIntoConstraints = false
         customLabel.font = UIFont.systemFont(ofSize: 17)
         customLabel.numberOfLines = 0
+        return customLabel
+    }()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupConstraints()
+    }
+    
+    private func setupConstraints() {
+        
         contentView.addSubview(customLabel)
         
         NSLayoutConstraint.activate([
