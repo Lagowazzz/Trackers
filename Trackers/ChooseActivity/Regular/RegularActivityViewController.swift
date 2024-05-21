@@ -107,7 +107,7 @@ final class RegularActivityViewController: UIViewController {
         view.addSubview(stackView)
         stackView.addArrangedSubview(cancelButton)
         stackView.addArrangedSubview(createButton)
-        
+
         NSLayoutConstraint.activate([
             trackerName.heightAnchor.constraint(equalToConstant: 75),
             trackerName.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
