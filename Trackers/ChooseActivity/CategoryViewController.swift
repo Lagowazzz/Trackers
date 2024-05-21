@@ -1,4 +1,3 @@
-
 import UIKit
 
 protocol CategoryViewControllerDelegate: AnyObject {
@@ -11,18 +10,6 @@ final class CategoryViewController: UIViewController {
     
     private var cellsTableView: [String] = []
     private var selectedCategoryIndex: Int?
-    
-    private let tableView: UITableView = {
-        let tableView = UITableView()
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.layer.cornerRadius = 16
-        tableView.layer.masksToBounds = true
-        tableView.separatorStyle = .singleLine
-        tableView.tableHeaderView = UIView()
-        tableView.separatorColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
-        tableView.register(CustomTableViewCell.self, forCellReuseIdentifier: CustomTableViewCell.reuseIdentifier)
-        return tableView
-    }()
     
     private let starImageView: UIImageView = {
         let starImageView = UIImageView()
@@ -40,6 +27,18 @@ final class CategoryViewController: UIViewController {
         starLabel.font = .systemFont(ofSize: 12)
         starLabel.textColor = .black
         return starLabel
+    }()
+    
+    private let tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.layer.cornerRadius = 16
+        tableView.layer.masksToBounds = true
+        tableView.separatorStyle = .singleLine
+        tableView.tableHeaderView = UIView()
+        tableView.separatorColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
+        tableView.register(CustomTableViewCell.self, forCellReuseIdentifier: CustomTableViewCell.reuseIdentifier)
+        return tableView
     }()
     
     private lazy var categoryButton: UIButton = {
@@ -65,8 +64,8 @@ final class CategoryViewController: UIViewController {
         view.backgroundColor = .white
         setupNavBar()
         setupConstraints()
-        tableView.delegate = self
-        tableView.dataSource = self
+        setupTableView()
+        updateEmptyStateVisibility()
     }
     
     @objc private func didTapCategoryButton() {
@@ -78,7 +77,6 @@ final class CategoryViewController: UIViewController {
     }
     
     private func setupConstraints() {
-        
         view.addSubview(starImageView)
         view.addSubview(starLabel)
         view.addSubview(tableView)
@@ -109,14 +107,16 @@ final class CategoryViewController: UIViewController {
         navigationItem.title = "Категория"
     }
     
-    private func changeStateImage(isHidden: Bool) {
-        starImageView.isHidden = !isHidden
-        starLabel.isHidden = !isHidden
-        tableView.isHidden = isHidden
+    private func setupTableView() {
+        tableView.delegate = self
+        tableView.dataSource = self
     }
     
     private func updateEmptyStateVisibility() {
-        changeStateImage(isHidden: cellsTableView.isEmpty)
+        let isTableEmpty = cellsTableView.isEmpty
+        starImageView.isHidden = !isTableEmpty
+        starLabel.isHidden = !isTableEmpty
+        tableView.isHidden = isTableEmpty
     }
 }
 
