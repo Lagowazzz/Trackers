@@ -6,23 +6,80 @@ protocol TrackersViewControllerDelegate: AnyObject {
 
 final class TrackersViewController: UIViewController, UICollectionViewDelegate {
     
-    private var mainLabel: UILabel!
-    private var starImageView: UIImageView!
-    private var whatsUpLabel: UILabel!
-    private var searchBar: UISearchController!
-    private var collectionView: UICollectionView!
-    private var noResultImageView: UIImageView!
-    private var noResultLabel: UILabel!
-    private var datePicker: UIDatePicker!
     private var categories: [TrackerCategory] = []
     private var visibleCategories: [TrackerCategory] = []
     var completedTrackers: [TrackerRecord] = []
     var currentDate: Date = .init()
     
+    private lazy var datePicker: UIDatePicker = {
+        let datePicker = UIDatePicker()
+        datePicker.translatesAutoresizingMaskIntoConstraints = false
+        datePicker.preferredDatePickerStyle = .compact
+        datePicker.datePickerMode = .date
+        datePicker.locale = Locale(identifier: "ru_RU")
+        datePicker.widthAnchor.constraint(equalToConstant: 120).isActive = true
+        datePicker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
+        return datePicker
+    }()
+    
+    private let searchBar: UISearchController = {
+        let searchBar = UISearchController(searchResultsController: nil)
+        searchBar.hidesNavigationBarDuringPresentation = false
+        searchBar.searchBar.placeholder = "Поиск"
+        searchBar.searchBar.searchTextField.clearButtonMode = .never
+        searchBar.searchBar.setValue("Отмена", forKey: "cancelButtonText")
+        return searchBar
+    }()
+    
+    private let starImageView: UIImageView = {
+        let starImageView = UIImageView()
+        starImageView.image = UIImage(named: "Star")
+        starImageView.frame = CGRect(x: 0, y: 0, width: 80, height: 80)
+        return starImageView
+    }()
+    
+    private let collectionView: UICollectionView = {
+        let collectionView = UICollectionView(
+            frame: .zero,
+            collectionViewLayout: UICollectionViewFlowLayout()
+        )
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.register(TrackersCollectionViewCell.self, forCellWithReuseIdentifier: "TrackerCell")
+        collectionView.register(TrackerSupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: TrackerSupplementaryView.reuseIdentifier)
+        return collectionView
+    }()
+    
+    private let whatsUpLabel: UILabel = {
+        let whatsUpLabel = UILabel()
+        whatsUpLabel.text = "Что будем отслеживать?"
+        whatsUpLabel.textAlignment = .center
+        whatsUpLabel.textColor = .black
+        whatsUpLabel.font = .systemFont(ofSize: 12)
+        whatsUpLabel.translatesAutoresizingMaskIntoConstraints = false
+        return whatsUpLabel
+    }()
+    
+    private let noResultImageView: UIImageView = {
+        let noResultImageView = UIImageView()
+        noResultImageView.translatesAutoresizingMaskIntoConstraints = false
+        noResultImageView.image = UIImage(named: "noResult")
+        return noResultImageView
+    }()
+    
+    private let noResultLabel: UILabel = {
+        let noResultLabel = UILabel()
+        noResultLabel.translatesAutoresizingMaskIntoConstraints = false
+        noResultLabel.text = "Ничего не найдено"
+        noResultLabel.font = .systemFont(ofSize: 12)
+        noResultLabel.textColor = .black
+        return noResultLabel
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        setupUI()
+        setupNavigationBar()
+        setupConstraints()
         currentDate = Date()
         filterVisibleCategories(for: currentDate)
         emptyCollectionView()
@@ -93,25 +150,35 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         view.endEditing(true)
     }
     
-    private func setupUI() {
-        setupSearchBar()
-        setupCollectionView()
-        setupStarImageView()
-        setupWhatsUpLabel()
-        setupDatePicker()
-        setupNavigationBar()
-        setupNoResultImageView()
-        setupNoResultLabel()
-    }
-    
-    private func setupDatePicker() {
-        datePicker = UIDatePicker()
-        datePicker.translatesAutoresizingMaskIntoConstraints = false
-        datePicker.preferredDatePickerStyle = .compact
-        datePicker.datePickerMode = .date
-        datePicker.locale = Locale(identifier: "ru_RU")
-        datePicker.widthAnchor.constraint(equalToConstant: 120).isActive = true
-        datePicker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
+    private func setupConstraints() {
+        view.addSubview(collectionView)
+        starImageView.center = view.center
+        view.addSubview(whatsUpLabel)
+        view.addSubview(starImageView)
+        view.addSubview(noResultImageView)
+        view.addSubview(noResultLabel)
+        
+        NSLayoutConstraint.activate([
+            
+            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            whatsUpLabel.widthAnchor.constraint(equalToConstant: 343),
+            whatsUpLabel.heightAnchor.constraint(equalToConstant: 18),
+            whatsUpLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            whatsUpLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            whatsUpLabel.topAnchor.constraint(equalTo: starImageView.bottomAnchor, constant: 8),
+            
+            noResultImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            noResultImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            noResultImageView.widthAnchor.constraint(equalToConstant: 80),
+            noResultImageView.heightAnchor.constraint(equalToConstant: 80),
+            
+            noResultLabel.topAnchor.constraint(equalTo: noResultImageView.bottomAnchor, constant: 8),
+            noResultLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
     }
     
     private func tapGesture() {
@@ -138,97 +205,17 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         searchBar.searchBar.delegate = self
     }
     
-    private func setupSearchBar() {
-        searchBar = UISearchController(searchResultsController: nil)
-        searchBar.hidesNavigationBarDuringPresentation = false
-        searchBar.searchBar.placeholder = "Поиск"
-        searchBar.searchBar.searchTextField.clearButtonMode = .never
-        searchBar.searchBar.setValue("Отмена", forKey: "cancelButtonText")
-    }
-    
-    private func setupCollectionView() {
-        collectionView = UICollectionView(
-            frame: .zero,
-            collectionViewLayout: UICollectionViewFlowLayout()
-        )
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.register(TrackersCollectionViewCell.self, forCellWithReuseIdentifier: "TrackerCell")
-        collectionView.register(TrackerSupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: TrackerSupplementaryView.reuseIdentifier)
-        view.addSubview(collectionView)
-        
-        NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-    }
-    
-    private func setupWhatsUpLabel() {
-        whatsUpLabel = UILabel()
-        whatsUpLabel.text = "Что будем отслеживать?"
-        whatsUpLabel.textAlignment = .center
-        whatsUpLabel.textColor = .black
-        whatsUpLabel.font = .systemFont(ofSize: 12)
-        whatsUpLabel.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(whatsUpLabel)
-        
-        NSLayoutConstraint.activate([
-            whatsUpLabel.widthAnchor.constraint(equalToConstant: 343),
-            whatsUpLabel.heightAnchor.constraint(equalToConstant: 18),
-            whatsUpLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            whatsUpLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            whatsUpLabel.topAnchor.constraint(equalTo: starImageView.bottomAnchor, constant: 8)
-        ])
-    }
-    
-    private func setupStarImageView() {
-        starImageView = UIImageView()
-        starImageView.image = UIImage(named: "Star")
-        starImageView.frame = CGRect(x: 0, y: 0, width: 80, height: 80)
-        starImageView.center = view.center
-        view.addSubview(starImageView)
-    }
-    
-    private func setupNoResultImageView() {
-        noResultImageView = UIImageView()
-        noResultImageView.translatesAutoresizingMaskIntoConstraints = false
-        noResultImageView.image = UIImage(named: "noResult")
-        view.addSubview(noResultImageView)
-        
-        NSLayoutConstraint.activate([
-            noResultImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            noResultImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            noResultImageView.widthAnchor.constraint(equalToConstant: 80),
-            noResultImageView.heightAnchor.constraint(equalToConstant: 80)
-        ])
-    }
-    
-    private func setupNoResultLabel() {
-        noResultLabel = UILabel()
-        noResultLabel.translatesAutoresizingMaskIntoConstraints = false
-        noResultLabel.text = "Ничего не найдено"
-        noResultLabel.font = .systemFont(ofSize: 12)
-        noResultLabel.textColor = .black
-        view.addSubview(noResultLabel)
-        
-        NSLayoutConstraint.activate([
-            noResultLabel.topAnchor.constraint(equalTo: noResultImageView.bottomAnchor, constant: 8),
-            noResultLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        ])
-    }
-    
     private func starImageVisibility(_ isVisible: Bool) {
         starImageView.isHidden = !isVisible
         whatsUpLabel.isHidden = !isVisible
+        collectionView.isHidden = isVisible
     }
-    
     
     private func noResultImageVisibility(_ isVisible: Bool) {
         noResultImageView.isHidden = !isVisible
         noResultLabel.isHidden = !isVisible
+        collectionView.isHidden = isVisible
     }
-    
     
     private func isMatchingRecord(model: TrackerRecord, with trackerId: UUID) -> Bool {
         return model.id == trackerId && Calendar.current.isDate(model.date, inSameDayAs: currentDate)
