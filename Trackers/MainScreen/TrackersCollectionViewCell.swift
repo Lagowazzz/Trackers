@@ -15,19 +15,57 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     var trackerID: UUID?
     var indexPath: IndexPath?
     
-    private var trackerNameLabel: UILabel!
-    var trackerView: UIView!
-    private var emojiLabel: UILabel!
-    private var trackerDayLabel: UILabel!
-    private var doneButton: UIButton!
+    private let trackerView: UIView = {
+        let trackerView = UIView()
+        trackerView.translatesAutoresizingMaskIntoConstraints = false
+        trackerView.layer.cornerRadius = 16
+        trackerView.layer.masksToBounds = true
+        trackerView.backgroundColor = .blue
+        return trackerView
+    }()
+    
+    private let trackerNameLabel: UILabel = {
+        let trackerNameLabel = UILabel()
+        trackerNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        trackerNameLabel.font = UIFont.systemFont(ofSize: 12)
+        trackerNameLabel.textColor = .white
+        trackerNameLabel.numberOfLines = 0
+        return trackerNameLabel
+    }()
+    
+    private let emojiLabel: UILabel = {
+        let emojiLabel = UILabel()
+        emojiLabel.translatesAutoresizingMaskIntoConstraints = false
+        emojiLabel.textAlignment = .center
+        emojiLabel.font = UIFont.systemFont(ofSize: 16)
+        emojiLabel.backgroundColor = .white.withAlphaComponent(0.3)
+        emojiLabel.layer.cornerRadius = 12
+        emojiLabel.layer.masksToBounds = true
+        return emojiLabel
+    }()
+    
+    private let trackerDayLabel: UILabel = {
+        let trackerDayLabel = UILabel()
+        trackerDayLabel.translatesAutoresizingMaskIntoConstraints = false
+        trackerDayLabel.font = UIFont.systemFont(ofSize: 12)
+        trackerDayLabel.textColor = .black
+        return trackerDayLabel
+    }()
+    
+    private lazy var doneButton: UIButton = {
+        let doneButton = UIButton()
+        doneButton.translatesAutoresizingMaskIntoConstraints = false
+        doneButton.tintColor = .white
+        doneButton.layer.cornerRadius = 17
+        doneButton.layer.masksToBounds = true
+        doneButton.contentMode = .center
+        doneButton.addTarget(self, action: #selector(didTapDoneButton), for: .touchUpInside)
+        return doneButton
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupTrackerView()
-        setupDoneButton()
-        setupTrackerDayLabel()
-        setupTrackerNameLabel()
-        setupEmojiLabel()
+        setupConstraints()
     }
     
     @objc private func didTapDoneButton() {
@@ -43,76 +81,33 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    private func setupTrackerView() {
-        trackerView = UIView()
-        trackerView.translatesAutoresizingMaskIntoConstraints = false
-        trackerView.layer.cornerRadius = 16
-        trackerView.layer.masksToBounds = true
-        trackerView.backgroundColor = .blue
+    private func setupConstraints() {
+        
         contentView.addSubview(trackerView)
+        trackerView.addSubview(trackerNameLabel)
+        trackerView.addSubview(emojiLabel)
+        contentView.addSubview(trackerDayLabel)
+        contentView.addSubview(doneButton)
         
         NSLayoutConstraint.activate([
             trackerView.topAnchor.constraint(equalTo: contentView.topAnchor),
             trackerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             trackerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            trackerView.heightAnchor.constraint(equalToConstant: 90)])
-    }
-    
-    private func setupTrackerNameLabel() {
-        trackerNameLabel = UILabel()
-        trackerNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        trackerNameLabel.font = UIFont.systemFont(ofSize: 12)
-        trackerNameLabel.textColor = .white
-        trackerNameLabel.numberOfLines = 0
-        trackerView.addSubview(trackerNameLabel)
-        
-        NSLayoutConstraint.activate([
+            trackerView.heightAnchor.constraint(equalToConstant: 90),
+            
             trackerNameLabel.leadingAnchor.constraint(equalTo: trackerView.leadingAnchor, constant: 12),
             trackerNameLabel.trailingAnchor.constraint(equalTo: trackerView.trailingAnchor, constant: -12),
-            trackerNameLabel.bottomAnchor.constraint(equalTo: trackerView.bottomAnchor, constant: -12)])
-    }
-    
-    private func setupEmojiLabel() {
-        emojiLabel = UILabel()
-        emojiLabel.translatesAutoresizingMaskIntoConstraints = false
-        emojiLabel.textAlignment = .center
-        emojiLabel.font = UIFont.systemFont(ofSize: 16)
-        emojiLabel.backgroundColor = .white.withAlphaComponent(0.3)
-        emojiLabel.layer.cornerRadius = 12
-        emojiLabel.layer.masksToBounds = true
-        trackerView.addSubview(emojiLabel)
-        
-        NSLayoutConstraint.activate([
+            trackerNameLabel.bottomAnchor.constraint(equalTo: trackerView.bottomAnchor, constant: -12),
+            
             emojiLabel.topAnchor.constraint(equalTo: trackerView.topAnchor, constant: 12),
             emojiLabel.leadingAnchor.constraint(equalTo: trackerView.leadingAnchor, constant: 12),
             emojiLabel.heightAnchor.constraint(equalToConstant: 24),
-            emojiLabel.widthAnchor.constraint(equalToConstant: 24)])
-    }
-    
-    private func setupTrackerDayLabel() {
-        trackerDayLabel = UILabel()
-        trackerDayLabel.translatesAutoresizingMaskIntoConstraints = false
-        trackerDayLabel.font = UIFont.systemFont(ofSize: 12)
-        trackerDayLabel.textColor = .black
-        contentView.addSubview(trackerDayLabel)
-        
-        NSLayoutConstraint.activate([
+            emojiLabel.widthAnchor.constraint(equalToConstant: 24),
+            
             trackerDayLabel.topAnchor.constraint(equalTo: trackerView.bottomAnchor, constant: 16),
             trackerDayLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
-            trackerDayLabel.heightAnchor.constraint(equalToConstant: 18)])
-    }
-    
-    private func setupDoneButton() {
-        doneButton = UIButton()
-        doneButton.translatesAutoresizingMaskIntoConstraints = false
-        doneButton.tintColor = .white
-        doneButton.layer.cornerRadius = 17
-        doneButton.layer.masksToBounds = true
-        doneButton.contentMode = .center
-        doneButton.addTarget(self, action: #selector(didTapDoneButton), for: .touchUpInside)
-        contentView.addSubview(doneButton)
-        
-        NSLayoutConstraint.activate([
+            trackerDayLabel.heightAnchor.constraint(equalToConstant: 18),
+            
             doneButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
             doneButton.topAnchor.constraint(equalTo: trackerView.bottomAnchor, constant: 8),
             doneButton.heightAnchor.constraint(equalToConstant: 34),
