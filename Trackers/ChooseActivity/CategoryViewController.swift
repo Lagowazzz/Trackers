@@ -114,24 +114,14 @@ final class CategoryViewController: UIViewController {
         navigationItem.title = "Категория"
     }
     
-    private func showEmptyStateImage() {
-        starImageView.isHidden = false
-        starLabel.isHidden = false
-        tableView.isHidden = true
-    }
-    
-    private func hideEmptyStateImage() {
-        starImageView.isHidden = true
-        starLabel.isHidden = true
-        tableView.isHidden = false
+    private func changeStateImage(isHidden: Bool) {
+        starImageView.isHidden = !isHidden
+        starLabel.isHidden = !isHidden
+        tableView.isHidden = isHidden
     }
     
     private func updateEmptyStateVisibility() {
-        if cellsTableView.isEmpty {
-            showEmptyStateImage()
-        } else {
-            hideEmptyStateImage()
-        }
+        changeStateImage(isHidden: cellsTableView.isEmpty)
     }
 }
 

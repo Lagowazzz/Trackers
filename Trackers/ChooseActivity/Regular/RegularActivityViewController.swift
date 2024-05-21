@@ -193,19 +193,23 @@ extension RegularActivityViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ActivityCell.reuseIdentifier, for: indexPath)
-        guard cell is ActivityCell else {
+        
+        guard let activityCell = cell as? ActivityCell else {
             return UITableViewCell()
         }
         
-        cell.accessoryType = .disclosureIndicator
-        cell.textLabel?.text = cellsTableView[indexPath.row]
-        cell.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
+        activityCell.accessoryType = .disclosureIndicator
+        activityCell.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
+        
         if indexPath.row == 0 {
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+            activityCell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+            activityCell.titleLabel.text = cellsTableView[indexPath.row]
         } else {
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
+            activityCell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
+            activityCell.titleLabel.text = cellsTableView[indexPath.row]
         }
-        return cell
+        
+        return activityCell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -220,6 +224,7 @@ extension RegularActivityViewController: WeekTableViewControllerDelegate {
         createWeekTable(weekTable: selectedDays)
         setupSubTitle(abbreviatedDays, forCellAt: IndexPath(row: 1, section: 0))
         updateCreateButtonActivation()
+        tableView.reloadData()
     }
 }
 

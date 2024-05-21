@@ -17,8 +17,8 @@ final class AddNewTrackerViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupStackView()
-        setupNoRegularButton()
         setupRegularButton()
+        setupNoRegularButton()
         setupNavigationBar()
     }
     

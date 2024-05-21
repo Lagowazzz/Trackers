@@ -68,11 +68,11 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         }
         
         if visibleCategories.isEmpty {
-            showNoResultImage()
-            hideStarImage()
+            noResultImageVisibility(true)
+            starImageVisibility(false)
         } else {
-            hideNoResultImage()
-            hideStarImage()
+            noResultImageVisibility(false)
+            starImageVisibility(false)
         }
         collectionView.reloadData()
     }
@@ -81,11 +81,11 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         if searchBar.text?.isEmpty ?? true {
             filterVisibleCategories(for: currentDate)
             if visibleCategories.isEmpty {
-                showStarImage()
+                starImageVisibility(true)
             } else {
-                hideStarImage()
+                starImageVisibility(false)
             }
-            hideNoResultImage()
+            noResultImageVisibility(false)
         }
     }
     
@@ -94,7 +94,6 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
     }
     
     private func setupUI() {
-        setupMainLabel()
         setupSearchBar()
         setupCollectionView()
         setupStarImageView()
@@ -133,7 +132,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
             action: #selector(plusButtonDidTap))
         plusButton.tintColor = .black
         navigationItem.searchController = searchBar
-        
+        navigationItem.title = "Трекеры"
         navigationItem.leftBarButtonItem = plusButton
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
         searchBar.searchBar.delegate = self
@@ -158,10 +157,10 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         view.addSubview(collectionView)
         
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
     
@@ -189,22 +188,6 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         starImageView.frame = CGRect(x: 0, y: 0, width: 80, height: 80)
         starImageView.center = view.center
         view.addSubview(starImageView)
-    }
-    
-    private func setupMainLabel() {
-        mainLabel = UILabel()
-        mainLabel.text = "Трекеры"
-        mainLabel.textColor = .black
-        mainLabel.font = .boldSystemFont(ofSize: 34)
-        mainLabel.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(mainLabel)
-        
-        NSLayoutConstraint.activate([
-            mainLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            mainLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 88),
-            mainLabel.widthAnchor.constraint(equalToConstant: 254),
-            mainLabel.heightAnchor.constraint(equalToConstant: 41)
-        ])
     }
     
     private func setupNoResultImageView() {
@@ -235,25 +218,17 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         ])
     }
     
-    private func showStarImage() {
-        starImageView.isHidden = false
-        whatsUpLabel.isHidden = false
+    private func starImageVisibility(_ isVisible: Bool) {
+        starImageView.isHidden = !isVisible
+        whatsUpLabel.isHidden = !isVisible
     }
     
-    private func hideStarImage() {
-        starImageView.isHidden = true
-        whatsUpLabel.isHidden = true
+    
+    private func noResultImageVisibility(_ isVisible: Bool) {
+        noResultImageView.isHidden = !isVisible
+        noResultLabel.isHidden = !isVisible
     }
     
-    private func showNoResultImage() {
-        noResultImageView.isHidden = false
-        noResultLabel.isHidden = false
-    }
-    
-    private func hideNoResultImage() {
-        noResultImageView.isHidden = true
-        noResultLabel.isHidden = true
-    }
     
     private func isMatchingRecord(model: TrackerRecord, with trackerId: UUID) -> Bool {
         return model.id == trackerId && Calendar.current.isDate(model.date, inSameDayAs: currentDate)
@@ -261,19 +236,19 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
     
     private func emptyCollectionView() {
         if visibleCategories.isEmpty && (searchBar.searchBar.text?.isEmpty ?? true) {
-            showStarImage()
-            hideNoResultImage()
+            starImageVisibility(true)
+            noResultImageVisibility(false)
         } else {
-            hideStarImage()
+            starImageVisibility(false)
         }
     }
     
     private func emptySearchCollectionView() {
         if visibleCategories.isEmpty && !(searchBar.searchBar.text?.isEmpty ?? true) {
-            showNoResultImage()
-            hideStarImage()
+            noResultImageVisibility(true)
+            starImageVisibility(false)
         } else {
-            hideNoResultImage()
+            noResultImageVisibility(false)
         }
     }
     
@@ -286,9 +261,9 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
             return !filteredTrackers.isEmpty
         }
         if visibleCategories.isEmpty {
-            showStarImage()
+            starImageVisibility(true)
         } else {
-            hideStarImage()
+            starImageVisibility(false)
         }
         collectionView.reloadData()
         emptyCollectionView()
@@ -372,9 +347,9 @@ extension TrackersViewController: TrackersViewControllerDelegate {
         updateVisibleCategories()
         collectionView.reloadData()
         if visibleCategories.isEmpty {
-            showStarImage()
+            starImageVisibility(true)
         } else {
-            hideStarImage()
+            starImageVisibility(false)
         }
     }
     
