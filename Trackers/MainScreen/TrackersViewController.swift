@@ -4,7 +4,10 @@ protocol TrackersViewControllerDelegate: AnyObject {
     func createdTracker(tracker: Tracker, categoryTitle: String)
 }
 
-final class TrackersViewController: UIViewController, UICollectionViewDelegate {
+final class TrackersViewController: UIViewController, UICollectionViewDelegate, AddNewTrackerViewControllerDelegate {
+    func cancelCreateTracker() {
+        dismiss(animated: true)
+    }
     
     private var categories: [TrackerCategory] = []
     private var visibleCategories: [TrackerCategory] = []

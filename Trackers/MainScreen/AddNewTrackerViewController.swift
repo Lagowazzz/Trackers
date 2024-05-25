@@ -1,13 +1,13 @@
 import UIKit
 
 protocol AddNewTrackerViewControllerDelegate: AnyObject {
-    func createTracker(tracker: Tracker, categoryTitle: String)
+    func createdTracker(tracker: Tracker, categoryTitle: String)
     func cancelCreateTracker()
 }
 
 final class AddNewTrackerViewController: UIViewController {
     
-    weak var delegate: TrackersViewControllerDelegate?
+    weak var delegate: AddNewTrackerViewControllerDelegate?
     
     private lazy var regularButton: UIButton = {
         let regularButton = UIButton()
@@ -52,16 +52,16 @@ final class AddNewTrackerViewController: UIViewController {
     }
     
     @objc private func regularButtonDidTap() {
-        let regularActivityViewController = RegularActivityViewController()
-        regularActivityViewController.delegate = self
-        let navigationController = UINavigationController(rootViewController: regularActivityViewController)
+        let activityViewController = ActivityViewController(activityType: .regular)
+        activityViewController.delegate = self
+        let navigationController = UINavigationController(rootViewController: activityViewController)
         present(navigationController, animated: true)
     }
     
     @objc private func noRegularButtonDidTap() {
-        let noRegularActivityViewController = NoRegularActivityViewController()
-        noRegularActivityViewController.delegate = self
-        let navigationController = UINavigationController(rootViewController: noRegularActivityViewController)
+        let activityViewController = ActivityViewController(activityType: .nonRegular)
+        activityViewController.delegate = self
+        let navigationController = UINavigationController(rootViewController: activityViewController)
         present(navigationController, animated: true)
     }
     
@@ -85,11 +85,10 @@ final class AddNewTrackerViewController: UIViewController {
     }
 }
 
-extension AddNewTrackerViewController: AddNewTrackerViewControllerDelegate {
-    func createTracker(tracker: Tracker, categoryTitle: String) {
-        delegate?.createdTracker(tracker: tracker, categoryTitle: categoryTitle)
+extension AddNewTrackerViewController: ActivityViewControllerDelegate {
+    func createTracker(tracker: Tracker, categoryTitle: String?) {
+        delegate?.createdTracker(tracker: tracker, categoryTitle: "")
         dismiss(animated: true)
-        cancelCreateTracker()
     }
     
     func cancelCreateTracker() {

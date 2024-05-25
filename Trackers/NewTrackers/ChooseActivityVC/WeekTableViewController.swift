@@ -2,7 +2,7 @@
 import UIKit
 
 protocol WeekTableViewControllerDelegate: AnyObject {
-    func updateWeekTable(_ selectedDays: [WeekDay])
+    func updateWeekTable(selectedDays: [WeekDay])
 }
 
 final class WeekTableViewController: UIViewController {
@@ -48,7 +48,7 @@ final class WeekTableViewController: UIViewController {
     
     @objc private func didTapDoneButton() {
         switchStatus()
-        delegate?.updateWeekTable(selectedWeekTable)
+        delegate?.updateWeekTable(selectedDays: selectedWeekTable)
         navigationController?.popViewController(animated: true)
     }
     

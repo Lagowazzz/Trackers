@@ -21,8 +21,7 @@
 		69705AF92BF9A66800521FBE /* TrackerRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69705AF82BF9A66800521FBE /* TrackerRecord.swift */; };
 		69705AFB2BF9A69700521FBE /* WeekTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69705AFA2BF9A69700521FBE /* WeekTable.swift */; };
 		69705AFD2BF9AA8500521FBE /* TrackerSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69705AFC2BF9AA8500521FBE /* TrackerSupplementaryView.swift */; };
-		69705B012BF9ABC800521FBE /* RegularActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69705B002BF9ABC800521FBE /* RegularActivityViewController.swift */; };
-		69705B042BF9AC1600521FBE /* NoRegularActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69705B032BF9AC1600521FBE /* NoRegularActivityViewController.swift */; };
+		69705B012BF9ABC800521FBE /* ActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69705B002BF9ABC800521FBE /* ActivityViewController.swift */; };
 		69705B062BF9ACE600521FBE /* ActivityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69705B052BF9ACE600521FBE /* ActivityCell.swift */; };
 		69705B082BF9AD4B00521FBE /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69705B072BF9AD4B00521FBE /* CategoryViewController.swift */; };
 		69705B0A2BF9AD7C00521FBE /* NewCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69705B092BF9AD7C00521FBE /* NewCategoryViewController.swift */; };
@@ -47,8 +46,7 @@
 		69705AF82BF9A66800521FBE /* TrackerRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecord.swift; sourceTree = "<group>"; };
 		69705AFA2BF9A69700521FBE /* WeekTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekTable.swift; sourceTree = "<group>"; };
 		69705AFC2BF9AA8500521FBE /* TrackerSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerSupplementaryView.swift; sourceTree = "<group>"; };
-		69705B002BF9ABC800521FBE /* RegularActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegularActivityViewController.swift; sourceTree = "<group>"; };
-		69705B032BF9AC1600521FBE /* NoRegularActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoRegularActivityViewController.swift; sourceTree = "<group>"; };
+		69705B002BF9ABC800521FBE /* ActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityViewController.swift; sourceTree = "<group>"; };
 		69705B052BF9ACE600521FBE /* ActivityCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityCell.swift; sourceTree = "<group>"; };
 		69705B072BF9AD4B00521FBE /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		69705B092BF9AD7C00521FBE /* NewCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCategoryViewController.swift; sourceTree = "<group>"; };
@@ -67,6 +65,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		69519E0B2C01634D00C8B71F /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				69705B092BF9AD7C00521FBE /* NewCategoryViewController.swift */,
+				69705B072BF9AD4B00521FBE /* CategoryViewController.swift */,
+			);
+			path = Category;
+			sourceTree = "<group>";
+		};
 		69705AC72BF99D1700521FBE = {
 			isa = PBXGroup;
 			children = (
@@ -86,7 +93,7 @@
 		69705AD22BF99D1700521FBE /* Trackers */ = {
 			isa = PBXGroup;
 			children = (
-				69705AFE2BF9AB9D00521FBE /* ChooseActivity */,
+				69705AFE2BF9AB9D00521FBE /* NewTrackers */,
 				69705AF32BF9A5F300521FBE /* Models */,
 				69705AEE2BF9A3D400521FBE /* Statistic */,
 				69705AE72BF9A0BF00521FBE /* MainScreen */,
@@ -131,33 +138,23 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		69705AFE2BF9AB9D00521FBE /* ChooseActivity */ = {
+		69705AFE2BF9AB9D00521FBE /* NewTrackers */ = {
 			isa = PBXGroup;
 			children = (
-				69705B022BF9ABF400521FBE /* NoRegular */,
-				69705AFF2BF9ABA700521FBE /* Regular */,
-				69705B072BF9AD4B00521FBE /* CategoryViewController.swift */,
-				69705B092BF9AD7C00521FBE /* NewCategoryViewController.swift */,
+				69519E0B2C01634D00C8B71F /* Category */,
+				69705AFF2BF9ABA700521FBE /* ChooseActivityVC */,
 			);
-			path = ChooseActivity;
+			path = NewTrackers;
 			sourceTree = "<group>";
 		};
-		69705AFF2BF9ABA700521FBE /* Regular */ = {
+		69705AFF2BF9ABA700521FBE /* ChooseActivityVC */ = {
 			isa = PBXGroup;
 			children = (
-				69705B002BF9ABC800521FBE /* RegularActivityViewController.swift */,
+				69705B002BF9ABC800521FBE /* ActivityViewController.swift */,
 				69705B0B2BF9ADD100521FBE /* WeekTableViewController.swift */,
 				69705B0D2BF9ADF400521FBE /* CustomTableViewCell.swift */,
 			);
-			path = Regular;
-			sourceTree = "<group>";
-		};
-		69705B022BF9ABF400521FBE /* NoRegular */ = {
-			isa = PBXGroup;
-			children = (
-				69705B032BF9AC1600521FBE /* NoRegularActivityViewController.swift */,
-			);
-			path = NoRegular;
+			path = ChooseActivityVC;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -231,7 +228,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				69705AF72BF9A64300521FBE /* TrackerCategory.swift in Sources */,
-				69705B012BF9ABC800521FBE /* RegularActivityViewController.swift in Sources */,
+				69705B012BF9ABC800521FBE /* ActivityViewController.swift in Sources */,
 				69705AE92BF9A0E200521FBE /* TrackersViewController.swift in Sources */,
 				69705AD42BF99D1700521FBE /* AppDelegate.swift in Sources */,
 				69705B082BF9AD4B00521FBE /* CategoryViewController.swift in Sources */,
@@ -244,7 +241,6 @@
 				69705AF92BF9A66800521FBE /* TrackerRecord.swift in Sources */,
 				69705AF52BF9A61200521FBE /* Tracker.swift in Sources */,
 				69705AEB2BF9A27F00521FBE /* TabBarController.swift in Sources */,
-				69705B042BF9AC1600521FBE /* NoRegularActivityViewController.swift in Sources */,
 				69705AF02BF9A4F700521FBE /* AddNewTrackerViewController.swift in Sources */,
 				69705B0A2BF9AD7C00521FBE /* NewCategoryViewController.swift in Sources */,
 				69705AD62BF99D1700521FBE /* SceneDelegate.swift in Sources */,
