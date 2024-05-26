@@ -1,7 +1,7 @@
 import UIKit
 
 protocol ActivityViewControllerDelegate: AnyObject {
-    func createTracker(tracker: Tracker, categoryTitle: String?)
+    func createTracker(tracker: Tracker, categoryTitle: String)
     func cancelCreateTracker()
 }
 
@@ -20,6 +20,25 @@ final class ActivityViewController: UIViewController {
     private var selectedWeekTable: [WeekDay] = []
     private var selectedCategory = String()
     private var activityType: ActivityType
+    private var selectedColor: UIColor?
+    private var selectedEmoji: String?
+    private var selectedColorIndex: Int?
+    private var selectedEmojiIndex: Int?
+    
+    private var emojis = [
+        "🙂", "😻", "🌺", "🐶", "❤️", "😱",
+        "😇", "😡", "🥶", "🤔", "🙌", "🍔",
+        "🥦", "🏓", "🥇", "🎸", "🏝", "😪"
+    ]
+    
+    private var colors: [UIColor] = [
+        .color1, .color2, .color3,
+        .color4, .color5, .color6,
+        .color7, .color8, .color9,
+        .color10, .color11, .color12,
+        .color13, .color14, .color15,
+        .color16, .color17, .color18
+    ]
     
     private let textField: UITextField = {
         let textField = UITextField()
@@ -85,6 +104,38 @@ final class ActivityViewController: UIViewController {
         return createButton
     }()
     
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollView
+    }()
+    
+    private let contentView: UIView = {
+        let contentView = UIView()
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        return contentView
+    }()
+    
+    private let colorsAndEmojisCollectionView: UICollectionView = {
+        let colorsAndEmojisCollectionView = UICollectionView(
+            frame: .zero,
+            collectionViewLayout: UICollectionViewFlowLayout()
+        )
+        colorsAndEmojisCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        colorsAndEmojisCollectionView.backgroundColor = .white
+        colorsAndEmojisCollectionView.isScrollEnabled = false
+        colorsAndEmojisCollectionView.register(
+            ColorsAndEmojisCells.self,
+            forCellWithReuseIdentifier: ColorsAndEmojisCells.reuseIdentifier
+        )
+        colorsAndEmojisCollectionView.register(
+            ColorsAndEmojisSupplementaryView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: ColorsAndEmojisSupplementaryView.reuseIdentifier
+        )
+        return colorsAndEmojisCollectionView
+    }()
+    
     init(activityType: ActivityType) {
         self.activityType = activityType
         super.init(nibName: nil, bundle: nil)
@@ -107,6 +158,9 @@ final class ActivityViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         
+        colorsAndEmojisCollectionView.dataSource = self
+        colorsAndEmojisCollectionView.delegate = self
+        
         setupCreateButtonState()
     }
     
@@ -124,8 +178,8 @@ final class ActivityViewController: UIViewController {
             newTracker = Tracker(
                 id: UUID(),
                 name: trackerName,
-                color: .red,
-                emoji: "🍕",
+                color: selectedColor ?? .black,
+                emoji: selectedEmoji ?? "🤷‍♂️",
                 timeTable: selectedWeekTable
             )
         case .nonRegular:
@@ -137,40 +191,61 @@ final class ActivityViewController: UIViewController {
             newTracker = Tracker(
                 id: UUID(),
                 name: trackerName,
-                color: .green,
-                emoji: "😎",
+                color: selectedColor ?? .black,
+                emoji: selectedEmoji ?? "🤷‍♂️",
                 timeTable: weekDayArray
             )
         }
         
-        delegate?.createTracker(tracker: newTracker, categoryTitle: selectedCategory.isEmpty ? "" : selectedCategory)
+        delegate?.createTracker(tracker: newTracker, categoryTitle: selectedCategory)
         dismiss(animated: true)
+        delegate?.cancelCreateTracker()
     }
     
     private func setupConstraints() {
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
         
-        view.addSubview(textField)
-        view.addSubview(tableView)
-        view.addSubview(stackView)
+        contentView.addSubview(textField)
+        contentView.addSubview(tableView)
+        contentView.addSubview(stackView)
+        contentView.addSubview(colorsAndEmojisCollectionView)
         
         stackView.addArrangedSubview(cancelButton)
         stackView.addArrangedSubview(createButton)
         
         NSLayoutConstraint.activate([
-            textField.heightAnchor.constraint(equalToConstant: 75),
-            textField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            textField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            textField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            
+            textField.heightAnchor.constraint(equalToConstant: 75),
+            textField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            textField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            textField.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 24),
+            
+            tableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            tableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             tableView.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 24),
             tableView.heightAnchor.constraint(equalToConstant: activityType == .regular ? 150 : 75),
             
+            colorsAndEmojisCollectionView.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 32),
+            colorsAndEmojisCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            colorsAndEmojisCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            colorsAndEmojisCollectionView.heightAnchor.constraint(equalToConstant: 460),
+            
             stackView.heightAnchor.constraint(equalToConstant: 60),
-            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
+            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            stackView.topAnchor.constraint(equalTo: colorsAndEmojisCollectionView.bottomAnchor, constant: 32),
+            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
     }
     
@@ -225,7 +300,7 @@ extension ActivityViewController: UITableViewDelegate {
         } else if indexPath.row == 1 && activityType == .regular {
             weekTableViewController = WeekTableViewController()
             weekTableViewController?.delegate = self
-            navigationController?.pushViewController(weekTableViewController!, animated: true)
+            navigationController?.pushViewController(weekTableViewController ?? WeekTableViewController(), animated: true)
         }
     }
 }
@@ -289,3 +364,118 @@ extension ActivityViewController: WeekTableViewControllerDelegate {
     }
 }
 
+extension ActivityViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if section == 0 {
+            return emojis.count
+        } else if section == 1 {
+            return colors.count
+        }
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ColorsAndEmojisCells.reuseIdentifier, for: indexPath) as? ColorsAndEmojisCells else {
+            return UICollectionViewCell()
+        }
+        
+        if indexPath.section == 0 {
+            let emoji = emojis[indexPath.row]
+            cell.colorAndEmojiLabel.text = emoji
+        } else if indexPath.section == 1 {
+            let color = colors[indexPath.row]
+            cell.colorAndEmojiLabel.backgroundColor = color
+        }
+        
+        cell.colorAndEmojiLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
+        
+        return cell
+    }
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 2
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let view = collectionView.dequeueReusableSupplementaryView(
+            ofKind: kind,
+            withReuseIdentifier: ColorsAndEmojisSupplementaryView.reuseIdentifier,
+            for: indexPath
+        ) as! ColorsAndEmojisSupplementaryView
+        if indexPath.section == 0 {
+            view.colorAndEmojiLabel.text = "Emoji"
+        } else if indexPath.section == 1 {
+            view.colorAndEmojiLabel.text = "Цвет"
+        }
+        return view
+    }
+}
+
+extension ActivityViewController: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 52, height: 52)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 24, left: 18, bottom: 40, right: 18)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 5
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        let indexPath = IndexPath(row: 0, section: section)
+        let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader,
+                                             at: indexPath)
+        return headerView.systemLayoutSizeFitting(
+            CGSize(
+                width: collectionView.frame.width,
+                height: UIView.layoutFittingExpandedSize.height
+            ),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        )
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.section == 0 {
+            if let selectedEmojiIndex = selectedEmojiIndex {
+                let previousSelectedIndexPath = IndexPath(item: selectedEmojiIndex, section: 0)
+                if let cell = collectionView.cellForItem(at: previousSelectedIndexPath) as? ColorsAndEmojisCells {
+                    cell.backgroundColor = .clear
+                }
+            }
+            
+            if let cell = collectionView.cellForItem(at: indexPath) as? ColorsAndEmojisCells {
+                cell.layer.cornerRadius = 16
+                cell.layer.masksToBounds = true
+                cell.backgroundColor = UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1)
+                selectedEmoji = emojis[indexPath.row]
+                selectedEmojiIndex = indexPath.row
+            }
+        } else if indexPath.section == 1 {
+            if let selectedColorIndex = selectedColorIndex {
+                let previousSelectedIndexPath = IndexPath(item: selectedColorIndex, section: 1)
+                if let cell = collectionView.cellForItem(at: previousSelectedIndexPath) as? ColorsAndEmojisCells {
+                    cell.layer.borderColor = UIColor.clear.cgColor
+                    cell.layer.borderWidth = 0
+                }
+            }
+            
+            if let cell = collectionView.cellForItem(at: indexPath) as? ColorsAndEmojisCells {
+                cell.layer.cornerRadius = 8
+                cell.layer.masksToBounds = true
+                cell.layer.borderColor = colors[indexPath.row].cgColor.copy(alpha: 0.3)
+                cell.layer.borderWidth = 3
+                selectedColor = colors[indexPath.row]
+                selectedColorIndex = indexPath.row
+            }
+        }
+    }
+}

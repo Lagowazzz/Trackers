@@ -4,7 +4,7 @@ final class ColorsAndEmojisSupplementaryView: UICollectionReusableView {
     
     static let reuseIdentifier = "ColorsAndEmojisSupplementaryView"
     
-    private let colorAndEmojiLabel: UILabel = {
+    let colorAndEmojiLabel: UILabel = {
         let colorAndEmojiLabel = UILabel()
         colorAndEmojiLabel.translatesAutoresizingMaskIntoConstraints = false
         colorAndEmojiLabel.font = UIFont.systemFont(ofSize: 19, weight: .bold)

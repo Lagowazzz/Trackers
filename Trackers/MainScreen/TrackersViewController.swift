@@ -25,6 +25,12 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
         return datePicker
     }()
     
+    private let emptyView: UIView = {
+        let emptyView = UIView()
+        emptyView.translatesAutoresizingMaskIntoConstraints = false
+        return emptyView
+    }()
+    
     private let searchBar: UISearchController = {
         let searchBar = UISearchController(searchResultsController: nil)
         searchBar.hidesNavigationBarDuringPresentation = false
@@ -81,6 +87,8 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        edgesForExtendedLayout = .all
+        
         setupNavigationBar()
         setupConstraints()
         currentDate = Date()
@@ -91,6 +99,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
         tapGesture()
         collectionView.delegate = self
         collectionView.dataSource = self
+        collectionView.contentInsetAdjustmentBehavior = .always
         searchBar.searchBar.delegate = self
     }
     
@@ -154,6 +163,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
     }
     
     private func setupConstraints() {
+        view.addSubview(emptyView)
         view.addSubview(collectionView)
         starImageView.center = view.center
         view.addSubview(whatsUpLabel)
@@ -163,10 +173,17 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
         
         NSLayoutConstraint.activate([
             
-            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            emptyView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            emptyView.bottomAnchor.constraint(equalTo: collectionView.topAnchor),
+            emptyView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            emptyView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            emptyView.heightAnchor.constraint(equalToConstant: 0),
+            emptyView.widthAnchor.constraint(equalToConstant: 0),
             
             whatsUpLabel.widthAnchor.constraint(equalToConstant: 343),
             whatsUpLabel.heightAnchor.constraint(equalToConstant: 18),

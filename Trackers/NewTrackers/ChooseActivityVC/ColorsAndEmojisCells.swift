@@ -4,7 +4,7 @@ final class ColorsAndEmojisCells: UICollectionViewCell {
     
     static let reuseIdentifier = "ColorsAndEmojisCells"
     
-    private let colorAndEmojiLabel: UILabel = {
+    let colorAndEmojiLabel: UILabel = {
         let colorAndEmojiLabel = UILabel()
         colorAndEmojiLabel.translatesAutoresizingMaskIntoConstraints = false
         colorAndEmojiLabel.textAlignment = .center
