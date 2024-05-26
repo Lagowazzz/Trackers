@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		69519E112C03160A00C8B71F /* ColorsSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69519E102C03160A00C8B71F /* ColorsSupplementaryView.swift */; };
+		69519E132C031B4700C8B71F /* ColorsAndEmojisCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69519E122C031B4700C8B71F /* ColorsAndEmojisCells.swift */; };
 		69705AD42BF99D1700521FBE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69705AD32BF99D1700521FBE /* AppDelegate.swift */; };
 		69705AD62BF99D1700521FBE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69705AD52BF99D1700521FBE /* SceneDelegate.swift */; };
 		69705ADD2BF99D1800521FBE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 69705ADC2BF99D1800521FBE /* Assets.xcassets */; };
@@ -32,6 +33,7 @@
 
 /* Begin PBXFileReference section */
 		69519E102C03160A00C8B71F /* ColorsSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsSupplementaryView.swift; sourceTree = "<group>"; };
+		69519E122C031B4700C8B71F /* ColorsAndEmojisCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsAndEmojisCells.swift; sourceTree = "<group>"; };
 		69705AD02BF99D1700521FBE /* Trackers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Trackers.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69705AD32BF99D1700521FBE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		69705AD52BF99D1700521FBE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 				69705B0B2BF9ADD100521FBE /* WeekTableViewController.swift */,
 				69705B0D2BF9ADF400521FBE /* CustomTableViewCell.swift */,
 				69519E102C03160A00C8B71F /* ColorsSupplementaryView.swift */,
+				69519E122C031B4700C8B71F /* ColorsAndEmojisCells.swift */,
 			);
 			path = ChooseActivityVC;
 			sourceTree = "<group>";
@@ -242,6 +245,7 @@
 				69705AFD2BF9AA8500521FBE /* TrackerSupplementaryView.swift in Sources */,
 				69705B062BF9ACE600521FBE /* ActivityCell.swift in Sources */,
 				69705AF22BF9A58900521FBE /* TrackersCollectionViewCell.swift in Sources */,
+				69519E132C031B4700C8B71F /* ColorsAndEmojisCells.swift in Sources */,
 				69705AF92BF9A66800521FBE /* TrackerRecord.swift in Sources */,
 				69705AF52BF9A61200521FBE /* Tracker.swift in Sources */,
 				69705AEB2BF9A27F00521FBE /* TabBarController.swift in Sources */,
