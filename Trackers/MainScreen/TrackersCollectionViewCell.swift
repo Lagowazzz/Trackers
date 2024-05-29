@@ -124,28 +124,31 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         self.trackerID = tracker.id
         self.isCompleted = isCompletedToday
         self.indexPath = indexPath
-        
+
         trackerView.backgroundColor = tracker.color
         emojiLabel.text = tracker.emoji
         trackerNameLabel.text = tracker.name
         updateTrackerDayLabel(completedDays: completedDays)
-        
-        let image = isCompleted! ? UIImage(systemName: "checkmark") : UIImage(systemName: "plus")
+
+        let imageName = isCompletedToday ? "checkmark" : "plus"
+        let image = UIImage(systemName: imageName)
         let imageView = UIImageView(image: image)
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        
+
         doneButton.backgroundColor = isCompletedToday ? tracker.color.withAlphaComponent(0.3) : tracker.color
         trackerNameLabel.backgroundColor = tracker.color
+
         for view in self.doneButton.subviews {
             view.removeFromSuperview()
         }
         doneButton.addSubview(imageView)
-        
+
         NSLayoutConstraint.activate([
             imageView.centerXAnchor.constraint(equalTo: doneButton.centerXAnchor),
             imageView.centerYAnchor.constraint(equalTo: doneButton.centerYAnchor)
         ])
     }
+
     
     private func updateTrackerDayLabel(completedDays: Int) {
         let daysText: String

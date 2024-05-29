@@ -15,19 +15,15 @@ final class ColorsAndEmojisSupplementaryView: UICollectionReusableView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        addSubview(colorAndEmojiLabel)
-        
-        NSLayoutConstraint.activate([
-            colorAndEmojiLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 28),
-            colorAndEmojiLabel.topAnchor.constraint(equalTo: topAnchor),
-            colorAndEmojiLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
+        setupView()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        
+        setupView()
+    }
+    
+    private func setupView() {
         addSubview(colorAndEmojiLabel)
         
         NSLayoutConstraint.activate([
@@ -35,7 +31,5 @@ final class ColorsAndEmojisSupplementaryView: UICollectionReusableView {
             colorAndEmojiLabel.topAnchor.constraint(equalTo: topAnchor),
             colorAndEmojiLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
-        
-        assert(subviews.contains(colorAndEmojiLabel), "colorAndEmojiLabel не добавлен как subview")
     }
 }

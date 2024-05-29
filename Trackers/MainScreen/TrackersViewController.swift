@@ -257,14 +257,12 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
     
     private func filterVisibleCategories(for selectedDate: Date) {
         let selectedWeekday = Calendar.current.component(.weekday, from: selectedDate)
-        let today = Calendar.current.startOfDay(for: Date())
-        
         visibleCategories = categories.map { category in
             let filteredTrackers = category.trackers.filter { tracker in
                 if tracker.isIrregular {
                     return Calendar.current.isDate(selectedDate, inSameDayAs: Date())
                 } else {
-                    return tracker.timeTable.contains(WeekDay(rawValue: selectedWeekday) ?? .monday) && selectedDate >= today
+                    return tracker.timeTable.contains(WeekDay(rawValue: selectedWeekday) ?? .monday)
                 }
             }
             return TrackerCategory(title: category.title, trackers: filteredTrackers)
@@ -312,8 +310,16 @@ extension TrackersViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: TrackerSupplementaryView.reuseIdentifier, for: indexPath) as! TrackerSupplementaryView
-        view.setupTrackerSupplementaryView(text: visibleCategories.isEmpty ? "" : visibleCategories[indexPath.section].title)
+        guard let view = collectionView.dequeueReusableSupplementaryView(
+            ofKind: kind,
+            withReuseIdentifier: TrackerSupplementaryView.reuseIdentifier,
+            for: indexPath
+        ) as? TrackerSupplementaryView else {
+            return UICollectionReusableView()
+        }
+        
+        let title = visibleCategories.isEmpty ? "" : visibleCategories[indexPath.section].title
+        view.setupTrackerSupplementaryView(text: title)
         return view
     }
 }

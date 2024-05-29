@@ -15,20 +15,15 @@ final class ColorsAndEmojisCells: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        contentView.addSubview(colorAndEmojiLabel)
-        
-        NSLayoutConstraint.activate([
-            colorAndEmojiLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 6),
-            colorAndEmojiLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 6),
-            colorAndEmojiLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -6),
-            colorAndEmojiLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -6)
-        ])
+        setupView()
     }
     
     required init?(coder: NSCoder) {
-        super .init(coder: coder)
-        
+        super.init(coder: coder)
+        setupView()
+    }
+    
+    private func setupView() {
         contentView.addSubview(colorAndEmojiLabel)
         
         NSLayoutConstraint.activate([
@@ -37,6 +32,5 @@ final class ColorsAndEmojisCells: UICollectionViewCell {
             colorAndEmojiLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -6),
             colorAndEmojiLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -6)
         ])
-        assert(subviews.contains(colorAndEmojiLabel), "colorAndEmojiLabel не добавлен как subview")
     }
 }

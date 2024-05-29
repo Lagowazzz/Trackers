@@ -400,11 +400,14 @@ extension ActivityViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let view = collectionView.dequeueReusableSupplementaryView(
+        guard let view = collectionView.dequeueReusableSupplementaryView(
             ofKind: kind,
             withReuseIdentifier: ColorsAndEmojisSupplementaryView.reuseIdentifier,
             for: indexPath
-        ) as! ColorsAndEmojisSupplementaryView
+        ) as? ColorsAndEmojisSupplementaryView else {
+            return UICollectionReusableView()
+        }
+        
         if indexPath.section == 0 {
             view.colorAndEmojiLabel.text = "Emoji"
         } else if indexPath.section == 1 {
@@ -458,7 +461,7 @@ extension ActivityViewController: UICollectionViewDelegateFlowLayout {
             if let cell = collectionView.cellForItem(at: indexPath) as? ColorsAndEmojisCells {
                 cell.layer.cornerRadius = 16
                 cell.layer.masksToBounds = true
-                cell.backgroundColor = UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1)
+                cell.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 1)
                 selectedEmoji = emojis[indexPath.row]
                 selectedEmojiIndex = indexPath.row
             }

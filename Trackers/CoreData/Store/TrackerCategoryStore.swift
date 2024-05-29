@@ -48,8 +48,12 @@ final class TrackerCategoryStore: NSObject {
     }()
         
     convenience override init() {
-        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        self.init(context: context)
+        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+            let context = appDelegate.persistentContainer.viewContext
+            self.init(context: context)
+        } else {
+            fatalError("Unable to get AppDelegate or persistentContainer")
+        }
     }
     
     init(context: NSManagedObjectContext) {
