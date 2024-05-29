@@ -52,4 +52,16 @@ enum WeekDay: Int, CaseIterable {
             return "Вс"
         }
     }
+    
+    static func weekDay(fromWeekDays weekDays: [WeekDay]) -> Int16 {
+        var weekDay: Int16 = 0
+        for day in weekDays {
+            weekDay |= 1 << day.rawValue
+        }
+        return weekDay
+    }
+
+    static func weekDays(fromWeekDay value: Int16) -> [WeekDay] {
+        return WeekDay.allCases.filter { value & (1 << $0.rawValue) != 0 }
+    }
 }
