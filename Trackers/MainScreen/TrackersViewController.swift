@@ -280,6 +280,15 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
         }
         filterVisibleCategories(for: currentDate)
     }
+    
+    private func fetchRecords(for tracker: Tracker) -> [TrackerRecord] {
+        do {
+            return try trackerRecordStore.recordsFetch(for: tracker)
+        } catch {
+            assertionFailure("Failed to get records for tracker")
+            return []
+        }
+    }
 }
 
 extension TrackersViewController: UICollectionViewDataSource {
@@ -299,10 +308,8 @@ extension TrackersViewController: UICollectionViewDataSource {
         }
         
         let tracker = visibleCategories[indexPath.section].trackers[indexPath.row]
-        let isCompleted = completedTrackers.contains {
-            isMatchingRecord(model: $0, with: tracker.id)
-        }
-        let completedDays = completedTrackers.filter { $0.id == tracker.id }.count
+        let isCompleted = completedToday(trackerID: tracker.id, tracker: tracker)
+        let completedDays = fetchRecords(for: tracker).count
         
         cell.delegate = self
         cell.setupUI(with: tracker, isCompletedToday: isCompleted, completedDays: completedDays, indexPath: indexPath)
@@ -344,26 +351,42 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
 }
 
 extension TrackersViewController: TrackersCollectionViewCellDelegate {
+    
     func completeTracker(id: UUID) {
         guard currentDate <= Date() else {
             return
         }
-        
-        completedTrackers.append(TrackerRecord(id: id, date: currentDate))
+        let trackerRecord = TrackerRecord(id: id, date: selectedDate())
+        try? trackerRecordStore.addRecord(with: trackerRecord.id, by: trackerRecord.date)
         collectionView.reloadData()
         loadAndFilterData()
     }
     
     func noCompleteTracker(id: UUID) {
-        completedTrackers.removeAll { element in
-            if (element.id == id &&  Calendar.current.isDate(element.date, equalTo: currentDate, toGranularity: .day)) {
-                return true
-            } else {
-                return false
-            }
-        }
+        let trackerRecord = TrackerRecord(id: id, date: selectedDate())
+        try? trackerRecordStore.deleteRecord(with: trackerRecord.id, by: trackerRecord.date)
         collectionView.reloadData()
         loadAndFilterData()
+    }
+    
+    func completedToday(trackerID: UUID, tracker: Tracker) -> Bool {
+        let currentDate = datePicker.date
+        do {
+            let records = try trackerRecordStore.recordsFetch(for: tracker)
+            return records.contains { record in
+                record.id == trackerID && Calendar.current.isDate(record.date, inSameDayAs: currentDate)
+            }
+        } catch {
+            assertionFailure("Failed to fetch records for tracker")
+            return false
+        }
+    }
+    
+    func selectedDate() -> Date {
+        let calendar = Calendar.current
+        let dateComponents = calendar.dateComponents([.year, .month, .day], from: datePicker.date)
+        guard let selectedDate = calendar.date(from: dateComponents) else { return Date() }
+        return selectedDate
     }
 }
 
