@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		693C6BCD2C179748006D0E53 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693C6BCC2C179748006D0E53 /* OnboardingViewController.swift */; };
 		69519E112C03160A00C8B71F /* ColorsSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69519E102C03160A00C8B71F /* ColorsSupplementaryView.swift */; };
 		69519E132C031B4700C8B71F /* ColorsAndEmojisCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69519E122C031B4700C8B71F /* ColorsAndEmojisCells.swift */; };
 		69705AD42BF99D1700521FBE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69705AD32BF99D1700521FBE /* AppDelegate.swift */; };
@@ -37,6 +38,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		693C6BCC2C179748006D0E53 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		69519E102C03160A00C8B71F /* ColorsSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsSupplementaryView.swift; sourceTree = "<group>"; };
 		69519E122C031B4700C8B71F /* ColorsAndEmojisCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsAndEmojisCells.swift; sourceTree = "<group>"; };
 		69705AD02BF99D1700521FBE /* Trackers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Trackers.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -79,6 +81,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		693C6BCB2C179728006D0E53 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				693C6BCC2C179748006D0E53 /* OnboardingViewController.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
 		69519E0B2C01634D00C8B71F /* Category */ = {
 			isa = PBXGroup;
 			children = (
@@ -107,6 +117,7 @@
 		69705AD22BF99D1700521FBE /* Trackers */ = {
 			isa = PBXGroup;
 			children = (
+				693C6BCB2C179728006D0E53 /* Onboarding */,
 				69F672CE2C03714D00871B36 /* CoreData */,
 				69705AFE2BF9AB9D00521FBE /* NewTrackers */,
 				69705AF32BF9A5F300521FBE /* Models */,
@@ -285,6 +296,7 @@
 				69F672D52C04D0AC00871B36 /* TrackerCategoryStore.swift in Sources */,
 				69705AFB2BF9A69700521FBE /* WeekTable.swift in Sources */,
 				69705AED2BF9A30100521FBE /* StatisticViewController.swift in Sources */,
+				693C6BCD2C179748006D0E53 /* OnboardingViewController.swift in Sources */,
 				69705AFD2BF9AA8500521FBE /* TrackerSupplementaryView.swift in Sources */,
 				69705B062BF9ACE600521FBE /* ActivityCell.swift in Sources */,
 				69705AF22BF9A58900521FBE /* TrackersCollectionViewCell.swift in Sources */,
