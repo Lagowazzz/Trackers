@@ -2,6 +2,8 @@ import UIKit
 
 final class OnboardingViewController: UIPageViewController, UIPageViewControllerDelegate, UIPageViewControllerDataSource {
     
+    var onboardingCompletionHandler: (() -> Void)?
+    
     init() {
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
     }
@@ -98,9 +100,7 @@ final class OnboardingViewController: UIPageViewController, UIPageViewController
     }
     
     @objc private func didTapDoneButton() {
-        let tabBarController = TabBarController()
-        tabBarController.modalPresentationStyle = .fullScreen
-        present(tabBarController, animated: true)
+        onboardingCompletionHandler?()
     }
     
     private func setupUI() {
@@ -112,6 +112,7 @@ final class OnboardingViewController: UIPageViewController, UIPageViewController
             doneButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             doneButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             doneButton.heightAnchor.constraint(equalToConstant: 60),
+            
             pageControl.bottomAnchor.constraint(equalTo: doneButton.topAnchor, constant: -24),
             pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
