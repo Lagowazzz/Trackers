@@ -12,15 +12,15 @@ protocol TrackerCategoryStoreDelegate: AnyObject {
 
 protocol TrackerCategoryStoreProtocol {
     func setupDelegate(_ delegate: TrackerCategoryStoreDelegate)
-    func getCategories() throws -> [TrackerCategory]
+    func getCategories(completion: @escaping ([TrackerCategory]) -> Void)
     func fetchCategoryCoreData(for category: TrackerCategory) throws -> TrackerCategoryCoreData
-    func addCategory(_ category: TrackerCategory) throws
+    func addCategory(_ category: TrackerCategory, completion: @escaping (Error?) -> Void)
 }
 
 final class TrackerCategoryStore: NSObject {
     
     weak var delegate: TrackerCategoryStoreDelegate?
-        
+    
     private lazy var trackerStore: TrackerStore = {
         TrackerStore(context: context)
     }()
@@ -46,21 +46,23 @@ final class TrackerCategoryStore: NSObject {
         try? controller.performFetch()
         return controller
     }()
-        
+    
     convenience override init() {
         if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
             let context = appDelegate.persistentContainer.viewContext
             self.init(context: context)
         } else {
-            fatalError("Unable to get AppDelegate or persistentContainer")
+            NSLog("Unable to get AppDelegate or persistentContainer")
+            let temporaryContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+            self.init(context: temporaryContext)
         }
     }
-    
+
     init(context: NSManagedObjectContext) {
         self.context = context
         super.init()
     }
-        
+    
     private func saveContext() throws {
         guard context.hasChanges else { return }
         do {
@@ -134,16 +136,33 @@ extension TrackerCategoryStore: TrackerCategoryStoreProtocol {
         self.delegate = delegate
     }
     
-    func getCategories() throws -> [TrackerCategory] {
-        try fetchCategories()
+    func getCategories(completion: @escaping ([TrackerCategory]) -> Void) {
+        do {
+            let categories = try fetchCategories()
+            completion(categories)
+        } catch {
+            assertionFailure("Failed to fetch categories with error: \(error)")
+            completion([])
+        }
     }
     
     func fetchCategoryCoreData(for category: TrackerCategory) throws -> TrackerCategoryCoreData {
-        try fetchTrackerCategoryCoreData(for: category)
+        do {
+            let categoryCoreData = try fetchTrackerCategoryCoreData(for: category)
+            return categoryCoreData
+        } catch {
+            throw error
+        }
     }
     
-    func addCategory(_ category: TrackerCategory) throws {
-        try addNewCategory(category)
+    func addCategory(_ category: TrackerCategory, completion: @escaping (Error?) -> Void) {
+        do {
+            try addNewCategory(category)
+            completion(nil)
+        } catch {
+            assertionFailure("Failed to add category with error: \(error)")
+            completion(error)
+        }
     }
 }
 
