@@ -13,52 +13,9 @@ final class OnboardingViewController: UIPageViewController, UIPageViewController
     }
     
     private lazy var pages: [UIViewController] = {
-        let red = UIViewController()
-        let redImage = UIImage(named: "red")
-        let redImageView = UIImageView(image: redImage)
-        redImageView.contentMode = .scaleAspectFill
-        red.view.addSubview(redImageView)
-        redImageView.translatesAutoresizingMaskIntoConstraints = false
-        redImageView.leadingAnchor.constraint(equalTo: red.view.leadingAnchor).isActive = true
-        redImageView.trailingAnchor.constraint(equalTo: red.view.trailingAnchor).isActive = true
-        redImageView.bottomAnchor.constraint(equalTo: red.view.bottomAnchor).isActive = true
-        redImageView.topAnchor.constraint(equalTo: red.view.topAnchor).isActive = true
-        
-        let redLabel = UILabel()
-        redLabel.text = "Даже если это\n не литры воды и йога"
-        redLabel.font = .boldSystemFont(ofSize: 32)
-        redLabel.textColor = .black
-        redLabel.textAlignment = .center
-        redLabel.numberOfLines = 3
-        red.view.addSubview(redLabel)
-        redLabel.translatesAutoresizingMaskIntoConstraints = false
-        redLabel.leadingAnchor.constraint(equalTo: red.view.leadingAnchor, constant: 16).isActive = true
-        redLabel.trailingAnchor.constraint(equalTo: red.view.trailingAnchor, constant: -16).isActive = true
-        redLabel.bottomAnchor.constraint(equalTo: red.view.bottomAnchor, constant: -304).isActive = true
-        
-        let blue = UIViewController()
-        let blueImage = UIImage(named: "blue")
-        let blueImageView = UIImageView(image: blueImage)
-        blue.view.addSubview(blueImageView)
-        blueImageView.translatesAutoresizingMaskIntoConstraints = false
-        blueImageView.leadingAnchor.constraint(equalTo: blue.view.leadingAnchor).isActive = true
-        blueImageView.trailingAnchor.constraint(equalTo: blue.view.trailingAnchor).isActive = true
-        blueImageView.bottomAnchor.constraint(equalTo: blue.view.bottomAnchor).isActive = true
-        blueImageView.topAnchor.constraint(equalTo: blue.view.topAnchor).isActive = true
-        
-        let blueLabel = UILabel()
-        blueLabel.text = "Отслеживайте только\n то, что хотите"
-        blueLabel.font = .boldSystemFont(ofSize: 32)
-        blueLabel.textColor = .black
-        blueLabel.textAlignment = .center
-        blueLabel.numberOfLines = 3
-        blue.view.addSubview(blueLabel)
-        blueLabel.translatesAutoresizingMaskIntoConstraints = false
-        blueLabel.bottomAnchor.constraint(equalTo: blue.view.bottomAnchor, constant: -304).isActive = true
-        blueLabel.leadingAnchor.constraint(equalTo: blue.view.leadingAnchor, constant: 16).isActive = true
-        blueLabel.trailingAnchor.constraint(equalTo: blue.view.trailingAnchor, constant: -16).isActive = true
-        
-        return [blue, red]
+        let page1 = OnboardingSetupPageViewController(imageName: "blue", text: "Отслеживайте только\n то, что хотите")
+        let page2 = OnboardingSetupPageViewController(imageName: "red", text: "Даже если это\n не литры воды и йога")
+        return [page1, page2]
     }()
     
     private let doneButton: UIButton = {
@@ -78,10 +35,8 @@ final class OnboardingViewController: UIPageViewController, UIPageViewController
         let pageControl = UIPageControl()
         pageControl.numberOfPages = pages.count
         pageControl.currentPage = 0
-        
         pageControl.pageIndicatorTintColor = .black.withAlphaComponent(0.3)
         pageControl.currentPageIndicatorTintColor = .black
-        
         pageControl.translatesAutoresizingMaskIntoConstraints = false
         return pageControl
     }()

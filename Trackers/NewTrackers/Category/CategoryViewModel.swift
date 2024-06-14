@@ -2,12 +2,10 @@ import Foundation
 
 final class CategoryViewModel {
     
-    typealias Binding<T> = (T) -> Void
-    
     private var categories: [TrackerCategory] = []
     private let categoryStore: TrackerCategoryStoreProtocol
     
-    var updateHandler: (() -> Void)?
+    var updateHandler: Binding<[TrackerCategory]>?
     
     init(categoryStore: TrackerCategoryStoreProtocol) {
         self.categoryStore = categoryStore
@@ -16,7 +14,7 @@ final class CategoryViewModel {
     func fetchCategories() {
         categoryStore.getCategories { [weak self] categories in
             self?.categories = categories
-            self?.updateHandler?()
+            self?.updateHandler?(categories)
         }
     }
     
@@ -29,7 +27,7 @@ final class CategoryViewModel {
     }
     
     func didSelectCategory(at index: Int) {
-        updateHandler?()
+        updateHandler?(categories)
     }
     
     func addCategory(_ category: TrackerCategory) {
