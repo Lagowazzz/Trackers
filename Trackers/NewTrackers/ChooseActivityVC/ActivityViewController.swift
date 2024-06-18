@@ -180,7 +180,7 @@ final class ActivityViewController: UIViewController {
                 name: trackerName,
                 color: selectedColor ?? .black,
                 emoji: selectedEmoji ?? "🤷‍♂️",
-                timeTable: selectedWeekTable, 
+                timeTable: selectedWeekTable,
                 isIrregular: true
             )
         case .nonRegular:
@@ -194,7 +194,7 @@ final class ActivityViewController: UIViewController {
                 name: trackerName,
                 color: selectedColor ?? .black,
                 emoji: selectedEmoji ?? "🤷‍♂️",
-                timeTable: weekDayArray, 
+                timeTable: weekDayArray,
                 isIrregular: false
             )
         }
@@ -295,11 +295,11 @@ final class ActivityViewController: UIViewController {
 extension ActivityViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-//                if indexPath.row == 0 {
-//                    let categoryViewController = CategoryViewController()
-//                    categoryViewController.delegate = self
-//                    navigationController?.pushViewController(categoryViewController, animated: true)
-//                } else 
+        if indexPath.row == 0 {
+            let categoryViewController = CategoryViewController()
+            categoryViewController.delegate = self
+            navigationController?.pushViewController(categoryViewController, animated: true)
+        } else
         if indexPath.row == 1 && activityType == .regular {
             weekTableViewController = WeekTableViewController()
             weekTableViewController?.delegate = self

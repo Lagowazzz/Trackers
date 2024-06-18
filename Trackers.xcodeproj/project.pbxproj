@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		693C6BCD2C179748006D0E53 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693C6BCC2C179748006D0E53 /* OnboardingViewController.swift */; };
+		693C6BCF2C18CC79006D0E53 /* AppSettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693C6BCE2C18CC79006D0E53 /* AppSettingsStore.swift */; };
+		693C6BD32C1A3351006D0E53 /* CategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693C6BD22C1A3351006D0E53 /* CategoryViewModel.swift */; };
 		69519E112C03160A00C8B71F /* ColorsSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69519E102C03160A00C8B71F /* ColorsSupplementaryView.swift */; };
 		69519E132C031B4700C8B71F /* ColorsAndEmojisCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69519E122C031B4700C8B71F /* ColorsAndEmojisCells.swift */; };
 		69705AD42BF99D1700521FBE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69705AD32BF99D1700521FBE /* AppDelegate.swift */; };
@@ -29,6 +32,8 @@
 		69705B0A2BF9AD7C00521FBE /* NewCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69705B092BF9AD7C00521FBE /* NewCategoryViewController.swift */; };
 		69705B0C2BF9ADD100521FBE /* WeekTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69705B0B2BF9ADD100521FBE /* WeekTableViewController.swift */; };
 		69705B0E2BF9ADF400521FBE /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69705B0D2BF9ADF400521FBE /* CustomTableViewCell.swift */; };
+		69DFEBBA2C1CE2BC00EBC850 /* OnboardingSetupPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DFEBB92C1CE2BC00EBC850 /* OnboardingSetupPageViewController.swift */; };
+		69DFEBBD2C1CE67600EBC850 /* Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DFEBBC2C1CE67600EBC850 /* Binding.swift */; };
 		69F672D12C0371B300871B36 /* Trackers.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 69F672CF2C0371B300871B36 /* Trackers.xcdatamodeld */; };
 		69F672D32C04D06A00871B36 /* TrackerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F672D22C04D06A00871B36 /* TrackerStore.swift */; };
 		69F672D52C04D0AC00871B36 /* TrackerCategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F672D42C04D0AC00871B36 /* TrackerCategoryStore.swift */; };
@@ -37,6 +42,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		693C6BCC2C179748006D0E53 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
+		693C6BCE2C18CC79006D0E53 /* AppSettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsStore.swift; sourceTree = "<group>"; };
+		693C6BD22C1A3351006D0E53 /* CategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewModel.swift; sourceTree = "<group>"; };
 		69519E102C03160A00C8B71F /* ColorsSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsSupplementaryView.swift; sourceTree = "<group>"; };
 		69519E122C031B4700C8B71F /* ColorsAndEmojisCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsAndEmojisCells.swift; sourceTree = "<group>"; };
 		69705AD02BF99D1700521FBE /* Trackers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Trackers.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -61,6 +69,8 @@
 		69705B092BF9AD7C00521FBE /* NewCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCategoryViewController.swift; sourceTree = "<group>"; };
 		69705B0B2BF9ADD100521FBE /* WeekTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekTableViewController.swift; sourceTree = "<group>"; };
 		69705B0D2BF9ADF400521FBE /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
+		69DFEBB92C1CE2BC00EBC850 /* OnboardingSetupPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingSetupPageViewController.swift; sourceTree = "<group>"; };
+		69DFEBBC2C1CE67600EBC850 /* Binding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Binding.swift; sourceTree = "<group>"; };
 		69F672D02C0371B300871B36 /* Trackers.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Trackers.xcdatamodel; sourceTree = "<group>"; };
 		69F672D22C04D06A00871B36 /* TrackerStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStore.swift; sourceTree = "<group>"; };
 		69F672D42C04D0AC00871B36 /* TrackerCategoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryStore.swift; sourceTree = "<group>"; };
@@ -79,11 +89,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		693C6BCB2C179728006D0E53 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				693C6BCC2C179748006D0E53 /* OnboardingViewController.swift */,
+				69DFEBB92C1CE2BC00EBC850 /* OnboardingSetupPageViewController.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
 		69519E0B2C01634D00C8B71F /* Category */ = {
 			isa = PBXGroup;
 			children = (
 				69705B092BF9AD7C00521FBE /* NewCategoryViewController.swift */,
 				69705B072BF9AD4B00521FBE /* CategoryViewController.swift */,
+				693C6BD22C1A3351006D0E53 /* CategoryViewModel.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -107,6 +127,8 @@
 		69705AD22BF99D1700521FBE /* Trackers */ = {
 			isa = PBXGroup;
 			children = (
+				69DFEBBB2C1CE65F00EBC850 /* Binding */,
+				693C6BCB2C179728006D0E53 /* Onboarding */,
 				69F672CE2C03714D00871B36 /* CoreData */,
 				69705AFE2BF9AB9D00521FBE /* NewTrackers */,
 				69705AF32BF9A5F300521FBE /* Models */,
@@ -174,6 +196,14 @@
 			path = ChooseActivityVC;
 			sourceTree = "<group>";
 		};
+		69DFEBBB2C1CE65F00EBC850 /* Binding */ = {
+			isa = PBXGroup;
+			children = (
+				69DFEBBC2C1CE67600EBC850 /* Binding.swift */,
+			);
+			path = Binding;
+			sourceTree = "<group>";
+		};
 		69F672CE2C03714D00871B36 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
@@ -198,6 +228,7 @@
 				69F672D42C04D0AC00871B36 /* TrackerCategoryStore.swift */,
 				69F672D22C04D06A00871B36 /* TrackerStore.swift */,
 				69F672DA2C05AA0900871B36 /* UIColorMarshalling.swift */,
+				693C6BCE2C18CC79006D0E53 /* AppSettingsStore.swift */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -272,6 +303,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				693C6BD32C1A3351006D0E53 /* CategoryViewModel.swift in Sources */,
 				69F672DB2C05AA0900871B36 /* UIColorMarshalling.swift in Sources */,
 				69705AF72BF9A64300521FBE /* TrackerCategory.swift in Sources */,
 				69F672D12C0371B300871B36 /* Trackers.xcdatamodeld in Sources */,
@@ -280,13 +312,17 @@
 				69705AE92BF9A0E200521FBE /* TrackersViewController.swift in Sources */,
 				69705AD42BF99D1700521FBE /* AppDelegate.swift in Sources */,
 				69F672D32C04D06A00871B36 /* TrackerStore.swift in Sources */,
+				69DFEBBA2C1CE2BC00EBC850 /* OnboardingSetupPageViewController.swift in Sources */,
 				69705B082BF9AD4B00521FBE /* CategoryViewController.swift in Sources */,
 				69705B0E2BF9ADF400521FBE /* CustomTableViewCell.swift in Sources */,
 				69F672D52C04D0AC00871B36 /* TrackerCategoryStore.swift in Sources */,
 				69705AFB2BF9A69700521FBE /* WeekTable.swift in Sources */,
+				693C6BCF2C18CC79006D0E53 /* AppSettingsStore.swift in Sources */,
 				69705AED2BF9A30100521FBE /* StatisticViewController.swift in Sources */,
+				693C6BCD2C179748006D0E53 /* OnboardingViewController.swift in Sources */,
 				69705AFD2BF9AA8500521FBE /* TrackerSupplementaryView.swift in Sources */,
 				69705B062BF9ACE600521FBE /* ActivityCell.swift in Sources */,
+				69DFEBBD2C1CE67600EBC850 /* Binding.swift in Sources */,
 				69705AF22BF9A58900521FBE /* TrackersCollectionViewCell.swift in Sources */,
 				69519E132C031B4700C8B71F /* ColorsAndEmojisCells.swift in Sources */,
 				69705AF92BF9A66800521FBE /* TrackerRecord.swift in Sources */,

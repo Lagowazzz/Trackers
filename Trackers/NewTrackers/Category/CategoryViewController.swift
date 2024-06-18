@@ -6,6 +6,8 @@ protocol CategoryViewControllerDelegate: AnyObject {
 
 final class CategoryViewController: UIViewController {
     
+    private var viewModel = CategoryViewModel(categoryStore: TrackerCategoryStore())
+    
     weak var delegate: CategoryViewControllerDelegate?
     
     private var cellsTableView: [String] = []
@@ -61,6 +63,8 @@ final class CategoryViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        updateHandler()
+        viewModel.fetchCategories()
         view.backgroundColor = .white
         setupNavBar()
         setupConstraints()
@@ -73,6 +77,14 @@ final class CategoryViewController: UIViewController {
         let navigationController = UINavigationController(rootViewController: newCategoryViewController)
         present(navigationController, animated: true) {
             newCategoryViewController.delegate = self
+        }
+    }
+    
+    private func updateHandler() {
+        viewModel = CategoryViewModel(categoryStore: TrackerCategoryStore())
+        viewModel.updateHandler = { [weak self] categories in
+            self?.tableView.reloadData()
+            self?.updateEmptyStateVisibility()
         }
     }
     
@@ -113,7 +125,7 @@ final class CategoryViewController: UIViewController {
     }
     
     private func updateEmptyStateVisibility() {
-        let isTableEmpty = cellsTableView.isEmpty
+        let isTableEmpty = viewModel.numberOfCategories() == 0
         starImageView.isHidden = !isTableEmpty
         starLabel.isHidden = !isTableEmpty
         tableView.isHidden = isTableEmpty
@@ -127,15 +139,15 @@ extension CategoryViewController: UITableViewDelegate {
         selectedCategoryIndex = indexPath.row
         tableView.reloadData()
         
-        let selectedCategory = cellsTableView[indexPath.row]
-        delegate?.didSelectCategory(selectedCategory)
+        let selectedCategory = viewModel.category(at: indexPath.row)
+        delegate?.didSelectCategory(selectedCategory.title)
         navigationController?.popViewController(animated: true)
     }
 }
 
 extension CategoryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return cellsTableView.count
+        return viewModel.numberOfCategories()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -143,7 +155,8 @@ extension CategoryViewController: UITableViewDataSource {
         guard cell is CustomTableViewCell else {
             return UITableViewCell()
         }
-        cell.textLabel?.text = cellsTableView[indexPath.row]
+        let category = viewModel.category(at: indexPath.row)
+        cell.textLabel?.text = category.title
         cell.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
         cell.separatorInset = UIEdgeInsets(
             top: 0,
@@ -155,7 +168,7 @@ extension CategoryViewController: UITableViewDataSource {
         cell.layer.masksToBounds = true
         cell.layer.cornerRadius = 16.0
         
-        if cellsTableView.count == 1 {
+        if viewModel.numberOfCategories() == 1 {
             cell.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         } else {
             let numberOfRows = tableView.numberOfRows(inSection: indexPath.section)
@@ -182,14 +195,10 @@ extension CategoryViewController: UITableViewDataSource {
 }
 
 extension CategoryViewController: NewCategoryViewControllerDelegate {
-    func didCreateCategory(_ category: String) {
-        if !cellsTableView.contains(category) {
-            cellsTableView.append(category)
-            tableView.invalidateIntrinsicContentSize()
-            tableView.layoutIfNeeded()
-            tableView.reloadData()
-            updateEmptyStateVisibility()
-        }
+    func didCreateCategory(_ category: TrackerCategory) {
+        viewModel.addCategory(category)
+        tableView.reloadData()
+        updateEmptyStateVisibility()
     }
     
     func updatedCategoryList(_ categories: [String]) {

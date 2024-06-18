@@ -273,12 +273,10 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
     }
     
     private func loadAndFilterData() {
-        do {
-            categories = try trackerCategoryStore.getCategories()
-        } catch {
-            assertionFailure("Failed to get categories")
+        trackerCategoryStore.getCategories { [weak self] categories in
+            self?.categories = categories
+            self?.filterVisibleCategories(for: self?.currentDate ?? Date())
         }
-        filterVisibleCategories(for: currentDate)
     }
     
     private func fetchRecords(for tracker: Tracker) -> [TrackerRecord] {
