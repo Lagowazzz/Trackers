@@ -4,7 +4,7 @@ final class StatisticViewController: UIViewController {
     
     private let statisticLabel: UILabel = {
         let statisticLabel = UILabel()
-        statisticLabel.text = "Статистика"
+        statisticLabel.text = NSLocalizedString("tabBarStatistic.title", comment: "")
         statisticLabel.font = .boldSystemFont(ofSize: 34)
         statisticLabel.textColor = .black
         statisticLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -20,7 +20,7 @@ final class StatisticViewController: UIViewController {
     
     private let nothingLabel: UILabel = {
         let nothingLabel = UILabel()
-        nothingLabel.text = "Анализировать пока нечего"
+        nothingLabel.text = NSLocalizedString("nothingToAnalyze.title", comment: "")
         nothingLabel.textAlignment = .center
         nothingLabel.textColor = .black
         nothingLabel.font = .systemFont(ofSize: 12)

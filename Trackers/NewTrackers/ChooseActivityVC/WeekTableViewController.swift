@@ -30,7 +30,7 @@ final class WeekTableViewController: UIViewController {
         doneButton.backgroundColor = .black
         doneButton.layer.cornerRadius = 16
         doneButton.layer.masksToBounds = true
-        doneButton.setTitle("Готово", for: .normal)
+        doneButton.setTitle(NSLocalizedString("categoryDoneButton.title", comment: ""), for: .normal)
         doneButton.setTitleColor(.white, for: .normal)
         doneButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         doneButton.addTarget(self, action: #selector(didTapDoneButton), for: .touchUpInside)
@@ -73,7 +73,7 @@ final class WeekTableViewController: UIViewController {
     }
     
     private func setupNavBar() {
-        navigationItem.title = "Расписание"
+        navigationItem.title = NSLocalizedString("schedule.title", comment: "")
     }
     
     private func switchStatus() {

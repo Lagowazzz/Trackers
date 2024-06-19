@@ -17,7 +17,7 @@ final class NewCategoryViewController: UIViewController {
         textField.layer.masksToBounds = true
         textField.font = UIFont.systemFont(ofSize: 17)
         textField.setupLeftPadding(16)
-        textField.placeholder = "Введите название категории"
+        textField.placeholder = NSLocalizedString("getCategoryName.title", comment: "")
         textField.clearButtonMode = .whileEditing
         textField.returnKeyType = .done
         textField.enablesReturnKeyAutomatically = true
@@ -31,7 +31,7 @@ final class NewCategoryViewController: UIViewController {
         doneButton.backgroundColor = .black
         doneButton.layer.cornerRadius = 16
         doneButton.layer.masksToBounds = true
-        doneButton.setTitle("Готово", for: .normal)
+        doneButton.setTitle(NSLocalizedString("categoryDoneButton.title", comment: ""), for: .normal)
         doneButton.setTitleColor(.white, for: .normal)
         doneButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         doneButton.addTarget(self, action: #selector(didTapDoneButton), for: .touchUpInside)
@@ -76,7 +76,7 @@ final class NewCategoryViewController: UIViewController {
     }
     
     private func setupNavBar() {
-        navigationItem.title = "Новая категория"
+        navigationItem.title = NSLocalizedString("newCategoryMain.title", comment: "")
     }
 }
 

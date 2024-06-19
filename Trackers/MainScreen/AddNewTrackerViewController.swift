@@ -15,7 +15,7 @@ final class AddNewTrackerViewController: UIViewController {
         regularButton.backgroundColor = .black
         regularButton.layer.cornerRadius = 16
         regularButton.layer.masksToBounds = true
-        regularButton.setTitle("Привычка", for: .normal)
+        regularButton.setTitle(NSLocalizedString("regularButton.title", comment: ""), for: .normal)
         regularButton.setTitleColor(.white, for: .normal)
         regularButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         regularButton.addTarget(self, action: #selector(regularButtonDidTap), for: .touchUpInside)
@@ -28,7 +28,7 @@ final class AddNewTrackerViewController: UIViewController {
         noRegularButton.backgroundColor = .black
         noRegularButton.layer.cornerRadius = 16
         noRegularButton.layer.masksToBounds = true
-        noRegularButton.setTitle("Нерегулярное событие", for: .normal)
+        noRegularButton.setTitle(NSLocalizedString("noRegularButton.title", comment: ""), for: .normal)
         noRegularButton.setTitleColor(.white, for: .normal)
         noRegularButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         noRegularButton.addTarget(self, action: #selector(noRegularButtonDidTap), for: .touchUpInside)
@@ -81,7 +81,7 @@ final class AddNewTrackerViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
-        navigationItem.title = "Создание трекера"
+        navigationItem.title = NSLocalizedString("createTracker.title", comment: "")
     }
 }
 

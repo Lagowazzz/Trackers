@@ -20,7 +20,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
         datePicker.translatesAutoresizingMaskIntoConstraints = false
         datePicker.preferredDatePickerStyle = .compact
         datePicker.datePickerMode = .date
-        datePicker.locale = Locale(identifier: "ru_RU")
+        datePicker.locale = .current
         datePicker.widthAnchor.constraint(equalToConstant: 120).isActive = true
         datePicker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
         return datePicker
@@ -35,9 +35,9 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
     private let searchBar: UISearchController = {
         let searchBar = UISearchController(searchResultsController: nil)
         searchBar.hidesNavigationBarDuringPresentation = false
-        searchBar.searchBar.placeholder = "Поиск"
+        searchBar.searchBar.placeholder = NSLocalizedString("searchBarPlaceholder.title", comment: "")
         searchBar.searchBar.searchTextField.clearButtonMode = .never
-        searchBar.searchBar.setValue("Отмена", forKey: "cancelButtonText")
+        searchBar.searchBar.setValue(NSLocalizedString("searchBarCancelButton.title", comment: ""), forKey: "cancelButtonText")
         return searchBar
     }()
     
@@ -61,7 +61,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
     
     private let whatsUpLabel: UILabel = {
         let whatsUpLabel = UILabel()
-        whatsUpLabel.text = "Что будем отслеживать?"
+        whatsUpLabel.text = NSLocalizedString("whatsUp.title", comment: "")
         whatsUpLabel.textAlignment = .center
         whatsUpLabel.textColor = .black
         whatsUpLabel.font = .systemFont(ofSize: 12)
@@ -79,7 +79,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
     private let noResultLabel: UILabel = {
         let noResultLabel = UILabel()
         noResultLabel.translatesAutoresizingMaskIntoConstraints = false
-        noResultLabel.text = "Ничего не найдено"
+        noResultLabel.text = NSLocalizedString("noResult.title", comment: "")
         noResultLabel.font = .systemFont(ofSize: 12)
         noResultLabel.textColor = .black
         return noResultLabel
@@ -215,7 +215,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
             action: #selector(plusButtonDidTap))
         plusButton.tintColor = .black
         navigationItem.searchController = searchBar
-        navigationItem.title = "Трекеры"
+        navigationItem.title = NSLocalizedString("tabBarTrackers.title", comment: "")
         navigationItem.leftBarButtonItem = plusButton
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
         searchBar.searchBar.delegate = self

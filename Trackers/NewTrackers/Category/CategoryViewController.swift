@@ -24,7 +24,7 @@ final class CategoryViewController: UIViewController {
         let starLabel = UILabel()
         starLabel.translatesAutoresizingMaskIntoConstraints = false
         starLabel.numberOfLines = 2
-        starLabel.text = "Привычки и события можно\nобъединить по смыслу"
+        starLabel.text = NSLocalizedString("category.title", comment: "")
         starLabel.textAlignment = .center
         starLabel.font = .systemFont(ofSize: 12)
         starLabel.textColor = .black
@@ -49,7 +49,7 @@ final class CategoryViewController: UIViewController {
         categoryButton.backgroundColor = .black
         categoryButton.layer.cornerRadius = 16
         categoryButton.layer.masksToBounds = true
-        categoryButton.setTitle("Добавить категорию", for: .normal)
+        categoryButton.setTitle(NSLocalizedString("addCategory.title", comment: ""), for: .normal)
         categoryButton.setTitleColor(.white, for: .normal)
         categoryButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         categoryButton.addTarget(self, action: #selector(didTapCategoryButton), for: .touchUpInside)
@@ -116,7 +116,7 @@ final class CategoryViewController: UIViewController {
     }
     
     private func setupNavBar() {
-        navigationItem.title = "Категория"
+        navigationItem.title = NSLocalizedString("categoryMain.title", comment: "")
     }
     
     private func setupTableView() {

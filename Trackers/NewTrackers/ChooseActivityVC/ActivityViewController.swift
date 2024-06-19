@@ -16,7 +16,7 @@ final class ActivityViewController: UIViewController {
     
     private var weekTableViewController: WeekTableViewController?
     
-    private let cellsTableView = ["Категория", "Расписание"]
+    private let cellsTableView = [NSLocalizedString("categoryMain.title", comment: ""), NSLocalizedString("schedule.title", comment: "")]
     private var selectedWeekTable: [WeekDay] = []
     private var selectedCategory = String()
     private var activityType: ActivityType
@@ -48,7 +48,7 @@ final class ActivityViewController: UIViewController {
         textField.layer.masksToBounds = true
         textField.font = UIFont.systemFont(ofSize: 17)
         textField.setupLeftPadding(16)
-        textField.placeholder = "Введите название трекера"
+        textField.placeholder = NSLocalizedString("getNameToTracker.title", comment: "")
         textField.clearButtonMode = .whileEditing
         textField.returnKeyType = .done
         textField.enablesReturnKeyAutomatically = true
@@ -81,7 +81,7 @@ final class ActivityViewController: UIViewController {
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
         cancelButton.backgroundColor = .white
         cancelButton.setTitleColor(.red, for: .normal)
-        cancelButton.setTitle("Отменить", for: .normal)
+        cancelButton.setTitle(NSLocalizedString("cancelButton.title", comment: ""), for: .normal)
         cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         cancelButton.layer.cornerRadius = 16
         cancelButton.layer.masksToBounds = true
@@ -97,7 +97,7 @@ final class ActivityViewController: UIViewController {
         createButton.backgroundColor = .black
         createButton.layer.cornerRadius = 16
         createButton.layer.masksToBounds = true
-        createButton.setTitle("Создать", for: .normal)
+        createButton.setTitle(NSLocalizedString("createButton.title", comment: ""), for: .normal)
         createButton.setTitleColor(.white, for: .normal)
         createButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         createButton.addTarget(self, action: #selector(didTapCreateButton), for: .touchUpInside)
@@ -252,7 +252,7 @@ final class ActivityViewController: UIViewController {
     }
     
     private func setupNavBar() {
-        navigationItem.title = activityType == .regular ? "Новая привычка" : "Новое нерегулярное событие"
+        navigationItem.title = activityType == .regular ? NSLocalizedString("newHabit.title", comment: "") : NSLocalizedString("newIrregularEvent.title", comment: "")
     }
     
     private func setupSubTitle(_ subTitle: String?, forCellAt indexPath: IndexPath) {
@@ -411,7 +411,7 @@ extension ActivityViewController: UICollectionViewDataSource {
         if indexPath.section == 0 {
             view.colorAndEmojiLabel.text = "Emoji"
         } else if indexPath.section == 1 {
-            view.colorAndEmojiLabel.text = "Цвет"
+            view.colorAndEmojiLabel.text = NSLocalizedString("color.title", comment: "")
         }
         return view
     }

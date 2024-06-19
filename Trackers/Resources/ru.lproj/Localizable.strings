@@ -1,0 +1,52 @@
+
+"blueLabel.title" = "Отслеживайте только\nто, что хотите";
+"redLabel.title" = "Даже если это не литры воды и йога";
+"doneButton.title" = "Вот это технологии!";
+
+"tabBarTrackers.title" = "Трекеры";
+"tabBarStatistic.title" = "Статистика";
+
+"searchBarPlaceholder.title" = "Поиск";
+"searchBarCancelButton.title" = "Отмена";
+
+"whatsUp.title" = "Что будем отслеживать?";
+"noResult.title" = "Ничего не найдено";
+
+"regularButton.title" = "Привычка";
+"noRegularButton.title" =  "Нерегулярное событие";
+"createTracker.title" = "Создание трекера";
+
+"nothingToAnalyze.title" = "Анализировать пока нечего";
+
+"getCategoryName.title" = "Введите название категории";
+"categoryDoneButton.title" = "Готово";
+"newCategoryMain.title" = "Новая категория";
+
+"category.title" = "Привычки и события можно\nобъединить по смыслу";
+"addCategory.title" = "Добавить категорию";
+"categoryMain.title" = "Категория";
+
+"schedule.title" = "Расписание";
+"getNameToTracker.title" = "Введите название трекера";
+"cancelButton.title" = "Отменить";
+"createButton.title" = "Создать";
+"newHabit.title" = "Новая привычка";
+"newIrregularEvent.title" = "Новое нерегулярное событие";
+"color.title" = "Цвет";
+
+
+"monday.title" = "Понедельник";
+"tuesday.title" = "Вторник";
+"wednesday.title" = "Среда";
+"thursday.title" = "Четверг";
+"friday.title" = "Пятница";
+"saturday.title" = "Суббота";
+"sunday.title" = "Воскресенье";
+
+"mon.title" = "Пн";
+"tue.title" = "Вт";
+"wed.title" = "Ср";
+"thu.title" = "Чт";
+"fri.title" = "Пт";
+"sat.title" = "Сб";
+"sun.title" = "Вс";

@@ -1,0 +1,52 @@
+
+"blueLabel.title" = "Sigue sólo lo que quieras";
+"redLabel.title" = "Aunque no sean litros de agua y yoga";
+"doneButton.title" = "¡Esto es tecnología!";
+
+"tabBarTrackers.title" = "Rastreadores";
+"tabBarStatistic.title" = "Estadísticas";
+
+"searchBarPlaceholder.title" = "Buscar";
+"searchBarCancelButton.title" = "Cancelar";
+
+"whatsUp.title" = "¿Qué rastrearemos?";
+"noResult.title" = "Nada Encontrado";
+
+"regularButton.title" = "Hábito";
+"noRegularButton.title" =  "Evento irregular";
+"createTracker.title" = "Creando un rastreador";
+
+"nothingToAnalyze.title" = "Aún no hay nada que analizar";
+
+"getCategoryName.title" = "Introduzca el nombre de la categoría";
+"categoryDoneButton.title" = "Listo";
+"newCategoryMain.title" = "Nueva categoría";
+
+"category.title" = "Los hábitos y los eventos se pueden combinar por significado";
+"addCategory.title" = "Añadir categoría";
+"categoryMain.title" = "Categoría";
+
+"schedule.title" = "Cronograma";
+"getNameToTracker.title" = "Introduce el nombre del rastreador";
+"cancelButton.title" = "Cancelar";
+"createButton.title" = "Crear";
+"newHabit.title" = "Nuevo hábito";
+"newIrregularEvent.title" = "Nuevo evento irregular";
+"color.title" = "Color";
+
+
+"monday.title" = "Lunes";
+"tuesday.title" = "Martes";
+"wednesday.title" = "Miércoles";
+"thursday.title" = "Jueves";
+"friday.title" = "Viernes";
+"saturday.title" = "Sábado";
+"sunday.title" = "Domingo";
+
+"mon.title" = "Lun";
+"tue.title" = "Mar";
+"wed.title" = "Mié";
+"thu.title" = "Jue";
+"fri.title" = "Vie";
+"sat.title" = "Sáb";
+"sun.title" = "Dom";
