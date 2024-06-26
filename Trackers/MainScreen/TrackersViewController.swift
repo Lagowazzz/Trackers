@@ -53,6 +53,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
             frame: .zero,
             collectionViewLayout: UICollectionViewFlowLayout()
         )
+        collectionView.backgroundColor = .spWhite
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(TrackersCollectionViewCell.self, forCellWithReuseIdentifier: "TrackerCell")
         collectionView.register(TrackerSupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: TrackerSupplementaryView.reuseIdentifier)
@@ -63,7 +64,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
         let whatsUpLabel = UILabel()
         whatsUpLabel.text = NSLocalizedString("whatsUp.title", comment: "")
         whatsUpLabel.textAlignment = .center
-        whatsUpLabel.textColor = .black
+        whatsUpLabel.textColor = .spBlack
         whatsUpLabel.font = .systemFont(ofSize: 12)
         whatsUpLabel.translatesAutoresizingMaskIntoConstraints = false
         return whatsUpLabel
@@ -81,13 +82,13 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
         noResultLabel.translatesAutoresizingMaskIntoConstraints = false
         noResultLabel.text = NSLocalizedString("noResult.title", comment: "")
         noResultLabel.font = .systemFont(ofSize: 12)
-        noResultLabel.textColor = .black
+        noResultLabel.textColor = .spBlack
         return noResultLabel
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .spWhite
         edgesForExtendedLayout = .all
         
         setupNavigationBar()
@@ -213,7 +214,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
             style: .plain,
             target: self,
             action: #selector(plusButtonDidTap))
-        plusButton.tintColor = .black
+        plusButton.tintColor = .spBlack
         navigationItem.searchController = searchBar
         navigationItem.title = NSLocalizedString("tabBarTrackers.title", comment: "")
         navigationItem.leftBarButtonItem = plusButton

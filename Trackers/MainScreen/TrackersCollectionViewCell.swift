@@ -28,7 +28,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         let trackerNameLabel = UILabel()
         trackerNameLabel.translatesAutoresizingMaskIntoConstraints = false
         trackerNameLabel.font = UIFont.systemFont(ofSize: 12)
-        trackerNameLabel.textColor = .white
+        trackerNameLabel.textColor = .spWhite
         trackerNameLabel.numberOfLines = 0
         return trackerNameLabel
     }()
@@ -48,14 +48,14 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         let trackerDayLabel = UILabel()
         trackerDayLabel.translatesAutoresizingMaskIntoConstraints = false
         trackerDayLabel.font = UIFont.systemFont(ofSize: 12)
-        trackerDayLabel.textColor = .black
+        trackerDayLabel.textColor = .spBlack
         return trackerDayLabel
     }()
     
     private lazy var doneButton: UIButton = {
         let doneButton = UIButton()
         doneButton.translatesAutoresizingMaskIntoConstraints = false
-        doneButton.tintColor = .white
+        doneButton.tintColor = .spWhite
         doneButton.layer.cornerRadius = 17
         doneButton.layer.masksToBounds = true
         doneButton.contentMode = .center

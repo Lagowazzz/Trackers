@@ -5,10 +5,10 @@ final class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
+        view.backgroundColor = .spWhite
         
         let separator = UIView(frame: CGRect(x: 0, y: 0, width: tabBar.frame.width, height: 1))
-        separator.backgroundColor = .gray
+        separator.backgroundColor = tabBarSeparatorColor
         tabBar.addSubview(separator)
         
         let trackersViewController = TrackersViewController()
@@ -25,5 +25,13 @@ final class TabBarController: UITabBarController {
             selectedImage: nil)
         
         self.viewControllers = [trackersNavigationController, statisticViewController]
+    }
+    
+    let tabBarSeparatorColor = UIColor { (traits: UITraitCollection) -> UIColor in
+        if traits.userInterfaceStyle == .light {
+            return UIColor.gray
+        } else {
+            return UIColor.black
+        }
     }
 }

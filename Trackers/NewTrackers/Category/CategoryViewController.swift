@@ -27,7 +27,7 @@ final class CategoryViewController: UIViewController {
         starLabel.text = NSLocalizedString("category.title", comment: "")
         starLabel.textAlignment = .center
         starLabel.font = .systemFont(ofSize: 12)
-        starLabel.textColor = .black
+        starLabel.textColor = .spBlack
         return starLabel
     }()
     
@@ -37,8 +37,8 @@ final class CategoryViewController: UIViewController {
         tableView.layer.cornerRadius = 16
         tableView.layer.masksToBounds = true
         tableView.separatorStyle = .singleLine
+        tableView.separatorColor = .lightGray
         tableView.tableHeaderView = UIView()
-        tableView.separatorColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
         tableView.register(CustomTableViewCell.self, forCellReuseIdentifier: CustomTableViewCell.reuseIdentifier)
         return tableView
     }()
@@ -46,11 +46,11 @@ final class CategoryViewController: UIViewController {
     private lazy var categoryButton: UIButton = {
         let categoryButton = UIButton()
         categoryButton.translatesAutoresizingMaskIntoConstraints = false
-        categoryButton.backgroundColor = .black
+        categoryButton.backgroundColor = .spBlack
         categoryButton.layer.cornerRadius = 16
         categoryButton.layer.masksToBounds = true
         categoryButton.setTitle(NSLocalizedString("addCategory.title", comment: ""), for: .normal)
-        categoryButton.setTitleColor(.white, for: .normal)
+        categoryButton.setTitleColor(.spWhite, for: .normal)
         categoryButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         categoryButton.addTarget(self, action: #selector(didTapCategoryButton), for: .touchUpInside)
         return categoryButton
@@ -65,7 +65,7 @@ final class CategoryViewController: UIViewController {
         super.viewDidLoad()
         updateHandler()
         viewModel.fetchCategories()
-        view.backgroundColor = .white
+        view.backgroundColor = .spWhite
         setupNavBar()
         setupConstraints()
         setupTableView()
@@ -143,6 +143,14 @@ extension CategoryViewController: UITableViewDelegate {
         delegate?.didSelectCategory(selectedCategory.title)
         navigationController?.popViewController(animated: true)
     }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == viewModel.numberOfCategories() - 1 {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: UIScreen.main.bounds.width)
+        } else {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        }
+    }
 }
 
 extension CategoryViewController: UITableViewDataSource {
@@ -157,14 +165,7 @@ extension CategoryViewController: UITableViewDataSource {
         }
         let category = viewModel.category(at: indexPath.row)
         cell.textLabel?.text = category.title
-        cell.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
-        cell.separatorInset = UIEdgeInsets(
-            top: 0,
-            left: 16,
-            bottom: 0,
-            right: 16
-        )
-        
+        cell.backgroundColor = .spGray
         cell.layer.masksToBounds = true
         cell.layer.cornerRadius = 16.0
         

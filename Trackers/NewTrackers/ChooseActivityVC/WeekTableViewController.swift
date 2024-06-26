@@ -20,6 +20,10 @@ final class WeekTableViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.layer.cornerRadius = 16
         tableView.layer.masksToBounds = true
+        tableView.separatorStyle = .singleLine
+        tableView.separatorColor = .lightGray
+        tableView.tableHeaderView = UIView()
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         tableView.register(CustomTableViewCell.self, forCellReuseIdentifier: CustomTableViewCell.reuseIdentifier)
         return tableView
     }()
@@ -27,11 +31,11 @@ final class WeekTableViewController: UIViewController {
     private lazy var doneButton: UIButton = {
         let doneButton = UIButton()
         doneButton.translatesAutoresizingMaskIntoConstraints = false
-        doneButton.backgroundColor = .black
+        doneButton.backgroundColor = .spBlack
         doneButton.layer.cornerRadius = 16
         doneButton.layer.masksToBounds = true
         doneButton.setTitle(NSLocalizedString("categoryDoneButton.title", comment: ""), for: .normal)
-        doneButton.setTitleColor(.white, for: .normal)
+        doneButton.setTitleColor(.spWhite, for: .normal)
         doneButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         doneButton.addTarget(self, action: #selector(didTapDoneButton), for: .touchUpInside)
         return doneButton
@@ -39,7 +43,7 @@ final class WeekTableViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .spWhite
         setupNavBar()
         setupConstraints()
         tableView.delegate = self
@@ -98,7 +102,7 @@ extension WeekTableViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CustomTableViewCell.reuseIdentifier, for: indexPath) as? CustomTableViewCell else { return UITableViewCell()}
-        cell.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
+        cell.backgroundColor = .spGray
         cell.textLabel?.text = WeekDay.allCases[indexPath.row].value
         let switchButton = UISwitch(frame: .zero)
         switchButton.setOn(false, animated: true)

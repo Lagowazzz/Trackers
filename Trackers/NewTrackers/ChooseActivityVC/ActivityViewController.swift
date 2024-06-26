@@ -43,7 +43,7 @@ final class ActivityViewController: UIViewController {
     private let textField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
+        textField.backgroundColor = .spGray
         textField.layer.cornerRadius = 16
         textField.layer.masksToBounds = true
         textField.font = UIFont.systemFont(ofSize: 17)
@@ -62,8 +62,12 @@ final class ActivityViewController: UIViewController {
         tableView.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
         tableView.layer.cornerRadius = 16
         tableView.layer.masksToBounds = true
-        tableView.separatorStyle = .none
+        tableView.separatorStyle = .singleLine
+        tableView.separatorColor = .lightGray
+        tableView.tableHeaderView = UIView()
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         tableView.register(ActivityCell.self, forCellReuseIdentifier: ActivityCell.reuseIdentifier)
+        
         return tableView
     }()
     
@@ -79,7 +83,7 @@ final class ActivityViewController: UIViewController {
     private lazy var cancelButton: UIButton = {
         let cancelButton = UIButton()
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
-        cancelButton.backgroundColor = .white
+        cancelButton.backgroundColor = .spWhite
         cancelButton.setTitleColor(.red, for: .normal)
         cancelButton.setTitle(NSLocalizedString("cancelButton.title", comment: ""), for: .normal)
         cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -94,11 +98,11 @@ final class ActivityViewController: UIViewController {
     private lazy var createButton: UIButton = {
         let createButton = UIButton()
         createButton.translatesAutoresizingMaskIntoConstraints = false
-        createButton.backgroundColor = .black
+        createButton.backgroundColor = .spBlack
         createButton.layer.cornerRadius = 16
         createButton.layer.masksToBounds = true
         createButton.setTitle(NSLocalizedString("createButton.title", comment: ""), for: .normal)
-        createButton.setTitleColor(.white, for: .normal)
+        createButton.setTitleColor(.spWhite, for: .normal)
         createButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         createButton.addTarget(self, action: #selector(didTapCreateButton), for: .touchUpInside)
         return createButton
@@ -122,7 +126,7 @@ final class ActivityViewController: UIViewController {
             collectionViewLayout: UICollectionViewFlowLayout()
         )
         colorsAndEmojisCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        colorsAndEmojisCollectionView.backgroundColor = .white
+        colorsAndEmojisCollectionView.backgroundColor = .spWhite
         colorsAndEmojisCollectionView.isScrollEnabled = false
         colorsAndEmojisCollectionView.register(
             ColorsAndEmojisCells.self,
@@ -147,8 +151,7 @@ final class ActivityViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = .white
+        view.backgroundColor = .spWhite
         setupNavBar()
         setupConstraints()
         createButton.isEnabled = false
@@ -157,6 +160,12 @@ final class ActivityViewController: UIViewController {
         textField.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
+        
+        if activityType == .nonRegular {
+                   tableView.separatorStyle = .none
+               } else {
+                   tableView.separatorStyle = .singleLine
+               }
         
         colorsAndEmojisCollectionView.dataSource = self
         colorsAndEmojisCollectionView.delegate = self
@@ -178,7 +187,7 @@ final class ActivityViewController: UIViewController {
             newTracker = Tracker(
                 id: UUID(),
                 name: trackerName,
-                color: selectedColor ?? .black,
+                color: selectedColor ?? .spBlack,
                 emoji: selectedEmoji ?? "🤷‍♂️",
                 timeTable: selectedWeekTable,
                 isIrregular: true
@@ -192,7 +201,7 @@ final class ActivityViewController: UIViewController {
             newTracker = Tracker(
                 id: UUID(),
                 name: trackerName,
-                color: selectedColor ?? .black,
+                color: selectedColor ?? .spBlack,
                 emoji: selectedEmoji ?? "🤷‍♂️",
                 timeTable: weekDayArray,
                 isIrregular: false
@@ -288,7 +297,7 @@ final class ActivityViewController: UIViewController {
             createButton.isEnabled = isTrackerNameEntered && isWeekTableSelected
         }
         
-        createButton.backgroundColor = createButton.isEnabled ? .black : UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1)
+        createButton.backgroundColor = createButton.isEnabled ? .spBlack : UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1)
     }
 }
 
@@ -319,9 +328,14 @@ extension ActivityViewController: UITableViewDataSource {
         }
         
         cell.accessoryType = .disclosureIndicator
-        cell.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
-        cell.titleLabel.text = cellsTableView[indexPath.row]
-        
+        cell.backgroundColor = .spGray
+        if indexPath.row == 0 {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: .zero, right: 16)
+            cell.titleLabel.text = cellsTableView[indexPath.row]
+        } else {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: .zero, right: .greatestFiniteMagnitude)
+            cell.titleLabel.text = cellsTableView[indexPath.row]
+        }
         return cell
     }
     
@@ -461,7 +475,7 @@ extension ActivityViewController: UICollectionViewDelegateFlowLayout {
             if let cell = collectionView.cellForItem(at: indexPath) as? ColorsAndEmojisCells {
                 cell.layer.cornerRadius = 16
                 cell.layer.masksToBounds = true
-                cell.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 1)
+                cell.backgroundColor = .spGray
                 selectedEmoji = emojis[indexPath.row]
                 selectedEmojiIndex = indexPath.row
             }

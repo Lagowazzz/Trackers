@@ -9,7 +9,7 @@ final class TrackerSupplementaryView: UICollectionReusableView {
         let titleLabel = UILabel()
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = UIFont.systemFont(ofSize: 19, weight: .bold)
-        titleLabel.textColor = .black
+        titleLabel.textColor = .spBlack
         titleLabel.textAlignment = .left
         return titleLabel
     }()
