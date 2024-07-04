@@ -351,6 +351,30 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
 
 extension TrackersViewController: TrackersCollectionViewCellDelegate {
     
+    func deleteTracker(tracker: Tracker) {
+        let actionList: UIAlertController = {
+            let alert = UIAlertController()
+            alert.title = NSLocalizedString("deleteAlert.title", comment: "")
+            return alert
+        }()
+        
+        let delete = UIAlertAction(title: NSLocalizedString("deleteAlertAction.title", comment: ""), style: .destructive) { [weak self] _ in
+            do {
+                try self?.trackerStore.deleteTracker(tracker)
+                self?.loadAndFilterData()
+                self?.collectionView.reloadData()
+            } catch {
+                assertionFailure("Failed to delete tracker: \(error)")
+            }
+        }
+        let cancel = UIAlertAction(title: NSLocalizedString("deleteAlertCancel.title", comment: ""), style: .cancel)
+        
+        actionList.addAction(delete)
+        actionList.addAction(cancel)
+        
+        present(actionList, animated: true)
+    }
+    
     func completeTracker(id: UUID) {
         guard currentDate <= Date() else {
             return

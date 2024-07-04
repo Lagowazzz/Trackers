@@ -88,7 +88,7 @@ final class TrackerStore: NSObject {
             isIrregular: isIrregular
         )
     }
-
+    
     private func addTracker(_ tracker: Tracker, to category: TrackerCategory) throws {
         let trackerCategoryCoreData = try trackerCategoryStore.fetchCategoryCoreData(for: category)
         let trackerCoreData = TrackerCoreData(context: context)
@@ -100,6 +100,16 @@ final class TrackerStore: NSObject {
         trackerCoreData.category = trackerCategoryCoreData
         
         try saveContext()
+    }
+    
+    private func saveContext() throws {
+        guard context.hasChanges else { return }
+        do {
+            try context.save()
+        } catch {
+            context.rollback()
+            throw error
+        }
     }
     
     func addCategoryIfNeeded(_ category: TrackerCategory) throws {
@@ -115,19 +125,25 @@ final class TrackerStore: NSObject {
         }
     }
     
-    private func saveContext() throws {
-        guard context.hasChanges else { return }
-        do {
-            try context.save()
-        } catch {
-            context.rollback()
-            throw error
+    func deleteTracker(_ tracker: Tracker) throws {
+        let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "idTracker == %@", tracker.id as CVarArg)
+        if let result = try context.fetch(fetchRequest).first {
+            context.delete(result)
+            try saveContext()
+        } else {
+            let userInfo: [String: Any] = [
+                NSLocalizedDescriptionKey: "Failed to delete tracker.",
+                NSLocalizedFailureReasonErrorKey: "Tracker with the specified ID was not found.",
+                "TrackerID": tracker.id
+            ]
+            throw NSError(domain: NSCocoaErrorDomain, code: NSManagedObjectValidationError, userInfo: userInfo)
         }
     }
 }
 
 extension TrackerStore: NSFetchedResultsControllerDelegate {
-   
+    
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         delegate?.trackerStoreUpdate(
             TrackerStoreUpdate(

@@ -35,7 +35,10 @@
 "newIrregularEvent.title" = "New irregular event";
 "color.title" = "Color";
 
-
+"deleteAction.title" = "Delete";
+"deleteAlert.title" = "Are you sure to delete this tracker?";
+"deleteAlertAction.title" = "Delete";
+"deleteAlertCancel.title" = "Cancel";
 
 "monday.title" = "Monday";
 "tuesday.title" = "Tuesday";

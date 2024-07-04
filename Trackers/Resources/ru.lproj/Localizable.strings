@@ -34,6 +34,10 @@
 "newIrregularEvent.title" = "Новое нерегулярное событие";
 "color.title" = "Цвет";
 
+"deleteAction.title" = "Удалить";
+"deleteAlert.title" = "Уверены, что хотите удалить трекер?";
+"deleteAlertAction.title" = "Удалить";
+"deleteAlertCancel.title" = "Отменить";
 
 "monday.title" = "Понедельник";
 "tuesday.title" = "Вторник";

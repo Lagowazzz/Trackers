@@ -34,6 +34,10 @@
 "newIrregularEvent.title" = "Nuevo evento irregular";
 "color.title" = "Color";
 
+"deleteAction.title" = "Borrar";
+"deleteAlert.title" = "¿Estás seguro de que quieres eliminar el rastreador?";
+"deleteAlertAction.title" = "Borrar";
+"deleteAlertCancel.title" = "Cancelar";
 
 "monday.title" = "Lunes";
 "tuesday.title" = "Martes";

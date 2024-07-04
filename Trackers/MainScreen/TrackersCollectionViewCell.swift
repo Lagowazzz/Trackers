@@ -4,6 +4,7 @@ import UIKit
 protocol TrackersCollectionViewCellDelegate: AnyObject {
     func completeTracker(id: UUID)
     func noCompleteTracker(id: UUID)
+    func deleteTracker(tracker: Tracker)
 }
 
 final class TrackersCollectionViewCell: UICollectionViewCell {
@@ -88,6 +89,8 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         trackerView.addSubview(emojiLabel)
         contentView.addSubview(trackerDayLabel)
         contentView.addSubview(doneButton)
+        let interaction = UIContextMenuInteraction(delegate: self)
+        trackerView.addInteraction(interaction)
         
         NSLayoutConstraint.activate([
             trackerView.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -161,3 +164,34 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 }
+
+extension TrackersCollectionViewCell: UIContextMenuInteractionDelegate {
+    
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        guard let _ = indexPath,
+              let _ = trackerID,
+              let _ = isCompleted
+        else {
+            return nil
+        }
+        
+        return UIContextMenuConfiguration(
+            identifier: nil,
+            previewProvider: nil,
+            actionProvider: { [weak self] _ in
+                
+                let deleteAction = UIAction(title: NSLocalizedString("deleteAction.title", comment: ""), attributes: .destructive) { _ in
+                    guard let trackerID = self?.trackerID,
+                          let _ = self?.indexPath else {
+                        return
+                    }
+                    let tracker = Tracker(id: trackerID, name: "", color: .clear, emoji: "", timeTable: [], isIrregular: Bool())
+                    self?.delegate?.deleteTracker(tracker: tracker)
+                }
+                
+                return UIMenu(title: "", children: [deleteAction])
+            }
+        )
+    }
+}
+
