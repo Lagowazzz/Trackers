@@ -38,6 +38,9 @@
 "deleteAlert.title" = "¿Estás seguro de que quieres eliminar el rastreador?";
 "deleteAlertAction.title" = "Borrar";
 "deleteAlertCancel.title" = "Cancelar";
+"pinned.title" = "Fijado";
+"pinAction.title" = "Alfiler";
+"unpinAction.title" = "Desprender";
 
 "monday.title" = "Lunes";
 "tuesday.title" = "Martes";

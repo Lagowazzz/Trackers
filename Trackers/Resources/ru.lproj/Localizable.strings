@@ -38,6 +38,9 @@
 "deleteAlert.title" = "Уверены, что хотите удалить трекер?";
 "deleteAlertAction.title" = "Удалить";
 "deleteAlertCancel.title" = "Отменить";
+"pinned.title" = "Закрепленные";
+"pinAction.title" = "Закрепить";
+"unpinAction.title" = "Открепить";
 
 "monday.title" = "Понедельник";
 "tuesday.title" = "Вторник";

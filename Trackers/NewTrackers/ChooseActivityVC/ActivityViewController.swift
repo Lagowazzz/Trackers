@@ -190,7 +190,8 @@ final class ActivityViewController: UIViewController {
                 color: selectedColor ?? .spBlack,
                 emoji: selectedEmoji ?? "🤷‍♂️",
                 timeTable: selectedWeekTable,
-                isIrregular: true
+                isIrregular: true,
+                isPinned: false
             )
         case .nonRegular:
             let currentDate = Date()
@@ -204,7 +205,8 @@ final class ActivityViewController: UIViewController {
                 color: selectedColor ?? .spBlack,
                 emoji: selectedEmoji ?? "🤷‍♂️",
                 timeTable: weekDayArray,
-                isIrregular: false
+                isIrregular: false,
+                isPinned: false
             )
         }
         

@@ -5,6 +5,7 @@ protocol TrackersCollectionViewCellDelegate: AnyObject {
     func completeTracker(id: UUID)
     func noCompleteTracker(id: UUID)
     func deleteTracker(tracker: Tracker)
+    func pinTracker(tracker: Tracker)
 }
 
 final class TrackersCollectionViewCell: UICollectionViewCell {
@@ -12,9 +13,11 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     static let reuseIdentifier = "TrackerCell"
     weak var delegate: TrackersCollectionViewCellDelegate?
     
-    var isCompleted: Bool?
-    var trackerID: UUID?
-    var indexPath: IndexPath?
+    private var isCompleted: Bool?
+    private var trackerID: UUID?
+    private var indexPath: IndexPath?
+    private var isPinned: Bool = false
+    
     
     private let trackerView: UIView = {
         let trackerView = UIView()
@@ -53,6 +56,20 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         return trackerDayLabel
     }()
     
+    private let pinImage: UIImageView = {
+        let image = UIImageView()
+        image.translatesAutoresizingMaskIntoConstraints = false
+        image.image = UIImage(systemName: "pin.fill")
+        image.image = image.image?.withAlignmentRectInsets(UIEdgeInsets(
+            top: -6,
+            left: -6,
+            bottom: -6,
+            right: -6)
+        )
+        image.tintColor = .white
+        return image
+    }()
+    
     private lazy var doneButton: UIButton = {
         let doneButton = UIButton()
         doneButton.translatesAutoresizingMaskIntoConstraints = false
@@ -87,6 +104,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(trackerView)
         trackerView.addSubview(trackerNameLabel)
         trackerView.addSubview(emojiLabel)
+        trackerView.addSubview(pinImage)
         contentView.addSubview(trackerDayLabel)
         contentView.addSubview(doneButton)
         let interaction = UIContextMenuInteraction(delegate: self)
@@ -114,8 +132,21 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
             doneButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
             doneButton.topAnchor.constraint(equalTo: trackerView.bottomAnchor, constant: 8),
             doneButton.heightAnchor.constraint(equalToConstant: 34),
-            doneButton.widthAnchor.constraint(equalToConstant: 34)
+            doneButton.widthAnchor.constraint(equalToConstant: 34),
+            
+            pinImage.widthAnchor.constraint(equalToConstant: 24),
+            pinImage.heightAnchor.constraint(equalToConstant: 24),
+            pinImage.topAnchor.constraint(equalTo: trackerView.topAnchor, constant: 12),
+            pinImage.trailingAnchor.constraint(equalTo: trackerView.trailingAnchor, constant: -4)
         ])
+    }
+    
+    private func showPin() {
+        if self.isPinned {
+            pinImage.isHidden = false
+        } else {
+            pinImage.isHidden = true
+        }
     }
     
     func setupUI(
@@ -127,6 +158,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         self.trackerID = tracker.id
         self.isCompleted = isCompletedToday
         self.indexPath = indexPath
+        self.isPinned = tracker.isPinned
         
         trackerView.backgroundColor = tracker.color
         emojiLabel.text = tracker.emoji
@@ -150,6 +182,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
             imageView.centerXAnchor.constraint(equalTo: doneButton.centerXAnchor),
             imageView.centerYAnchor.constraint(equalTo: doneButton.centerYAnchor)
         ])
+        showPin()
     }
     
     private func updateTrackerDayLabel(completedDays: Int) {
@@ -178,18 +211,27 @@ extension TrackersCollectionViewCell: UIContextMenuInteractionDelegate {
         return UIContextMenuConfiguration(
             identifier: nil,
             previewProvider: nil,
-            actionProvider: { [weak self] _ in
+            actionProvider: { _ in
                 
-                let deleteAction = UIAction(title: NSLocalizedString("deleteAction.title", comment: ""), attributes: .destructive) { _ in
+                let pinAction = UIAction(title: self.isPinned ? NSLocalizedString("unpinAction.title", comment: "") : NSLocalizedString("pinAction.title", comment: "")) { [weak self] _ in
                     guard let trackerID = self?.trackerID,
-                          let _ = self?.indexPath else {
+                          let indexPath = self?.indexPath else {
                         return
                     }
-                    let tracker = Tracker(id: trackerID, name: "", color: .clear, emoji: "", timeTable: [], isIrregular: Bool())
-                    self?.delegate?.deleteTracker(tracker: tracker)
+                    let tracker = Tracker(id: trackerID, name: "", color: .clear, emoji: "", timeTable: [], isIrregular: Bool(), isPinned: false)
+                    self?.delegate?.pinTracker(tracker: tracker)
                 }
                 
-                return UIMenu(title: "", children: [deleteAction])
+                let deleteAction = UIAction(title: NSLocalizedString("deleteAction.title", comment: ""), attributes: .destructive) { _ in
+                    guard let trackerID = self.trackerID,
+                          let _ = self.indexPath else {
+                        return
+                    }
+                    let tracker = Tracker(id: trackerID, name: "", color: .clear, emoji: "", timeTable: [], isIrregular: Bool(), isPinned: false)
+                    self.delegate?.deleteTracker(tracker: tracker)
+                }
+                
+                return UIMenu(title: "", children: [pinAction, deleteAction])
             }
         )
     }

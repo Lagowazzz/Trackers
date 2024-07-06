@@ -258,16 +258,33 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
     
     private func filterVisibleCategories(for selectedDate: Date) {
         let selectedWeekday = Calendar.current.component(.weekday, from: selectedDate)
-        visibleCategories = categories.map { category in
-            let filteredTrackers = category.trackers.filter { tracker in
-                if tracker.isIrregular {
-                    return Calendar.current.isDate(selectedDate, inSameDayAs: Date())
-                } else {
-                    return tracker.timeTable.contains(WeekDay(rawValue: selectedWeekday) ?? .monday)
+        
+        var newVisibleCategories: [TrackerCategory] = []
+        var pinnedTrackers: [Tracker] = []
+        
+        for category in categories {
+            var filteredTrackers: [Tracker] = []
+            for tracker in category.trackers {
+                if tracker.isPinned {
+                    pinnedTrackers.append(tracker)
+                } else if tracker.isIrregular && Calendar.current.isDate(selectedDate, inSameDayAs: Date()) {
+                    filteredTrackers.append(tracker)
+                } else if tracker.timeTable.contains(WeekDay(rawValue: selectedWeekday) ?? .monday) {
+                    filteredTrackers.append(tracker)
                 }
             }
-            return TrackerCategory(title: category.title, trackers: filteredTrackers)
-        }.filter { !$0.trackers.isEmpty }
+            
+            if !filteredTrackers.isEmpty {
+                newVisibleCategories.append(TrackerCategory(title: category.title, trackers: filteredTrackers))
+            }
+        }
+        
+        if !pinnedTrackers.isEmpty {
+            let pinnedCategory = TrackerCategory(title: NSLocalizedString("pinned.title", comment: ""), trackers: pinnedTrackers)
+            newVisibleCategories.insert(pinnedCategory, at: 0)
+        }
+        
+        visibleCategories = newVisibleCategories
         
         collectionView.reloadData()
         emptyCollectionView()
@@ -364,7 +381,7 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
                 self?.loadAndFilterData()
                 self?.collectionView.reloadData()
             } catch {
-                assertionFailure("Failed to delete tracker: \(error)")
+                assertionFailure("Failed to delete tracker")
             }
         }
         let cancel = UIAlertAction(title: NSLocalizedString("deleteAlertCancel.title", comment: ""), style: .cancel)
@@ -410,6 +427,15 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
         let dateComponents = calendar.dateComponents([.year, .month, .day], from: datePicker.date)
         guard let selectedDate = calendar.date(from: dateComponents) else { return Date() }
         return selectedDate
+    }
+    
+    func pinTracker(tracker: Tracker) {
+        do {
+            try trackerStore.pinTracker(tracker)
+            loadAndFilterData()
+        } catch {
+            assertionFailure("Failed to pin tracker")
+        }
     }
 }
 

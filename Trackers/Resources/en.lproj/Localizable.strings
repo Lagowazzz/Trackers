@@ -39,6 +39,9 @@
 "deleteAlert.title" = "Are you sure to delete this tracker?";
 "deleteAlertAction.title" = "Delete";
 "deleteAlertCancel.title" = "Cancel";
+"pinned.title" = "Fixed";
+"pinAction.title" = "Pin";
+"unpinAction.title" = "Unpin";
 
 "monday.title" = "Monday";
 "tuesday.title" = "Tuesday";
