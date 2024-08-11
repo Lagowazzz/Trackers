@@ -6,6 +6,7 @@ protocol TrackersCollectionViewCellDelegate: AnyObject {
     func noCompleteTracker(id: UUID)
     func deleteTracker(tracker: Tracker)
     func pinTracker(tracker: Tracker)
+    func editTracker(tracker: Tracker)
 }
 
 final class TrackersCollectionViewCell: UICollectionViewCell {
@@ -222,6 +223,15 @@ extension TrackersCollectionViewCell: UIContextMenuInteractionDelegate {
                     self?.delegate?.pinTracker(tracker: tracker)
                 }
                 
+                let editAction = UIAction(title: NSLocalizedString("editAction.title", comment: "")) { [weak self] _ in
+                    guard let trackerID = self?.trackerID,
+                          let indexPath = self?.indexPath else {
+                        return
+                    }
+                    let tracker = Tracker(id: trackerID, name: "", color: .clear, emoji: "", timeTable: [], isIrregular: Bool(), isPinned: false)
+                    self?.delegate?.editTracker(tracker: tracker)
+                }
+                
                 let deleteAction = UIAction(title: NSLocalizedString("deleteAction.title", comment: ""), attributes: .destructive) { _ in
                     guard let trackerID = self.trackerID,
                           let _ = self.indexPath else {
@@ -231,7 +241,7 @@ extension TrackersCollectionViewCell: UIContextMenuInteractionDelegate {
                     self.delegate?.deleteTracker(tracker: tracker)
                 }
                 
-                return UIMenu(title: "", children: [pinAction, deleteAction])
+                return UIMenu(title: "", children: [pinAction, editAction, deleteAction])
             }
         )
     }

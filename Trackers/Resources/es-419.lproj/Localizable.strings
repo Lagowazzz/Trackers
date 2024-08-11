@@ -41,6 +41,8 @@
 "pinned.title" = "Fijado";
 "pinAction.title" = "Alfiler";
 "unpinAction.title" = "Desprender";
+"editAction.title" = "Editar";
+"editTrackerMain.title" = "Editar un hábito";
 
 "monday.title" = "Lunes";
 "tuesday.title" = "Martes";

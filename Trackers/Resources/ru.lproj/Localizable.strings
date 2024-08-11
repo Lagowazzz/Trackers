@@ -41,6 +41,8 @@
 "pinned.title" = "Закрепленные";
 "pinAction.title" = "Закрепить";
 "unpinAction.title" = "Открепить";
+"editAction.title" = "Редактировать";
+"editTrackerMain.title" = "Редактирование привычки";
 
 "monday.title" = "Понедельник";
 "tuesday.title" = "Вторник";

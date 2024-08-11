@@ -437,6 +437,13 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
             assertionFailure("Failed to pin tracker")
         }
     }
+    
+    func editTracker(tracker: Tracker) {
+        let viewController = EditTrackerViewController(activityType: .regular)
+        viewController.tracker = tracker
+        let navigationController = UINavigationController(rootViewController: viewController)
+        present(navigationController, animated: true)
+    }
 }
 
 extension TrackersViewController: TrackersViewControllerDelegate {
