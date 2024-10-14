@@ -162,10 +162,10 @@ final class ActivityViewController: UIViewController {
         tableView.dataSource = self
         
         if activityType == .nonRegular {
-                   tableView.separatorStyle = .none
-               } else {
-                   tableView.separatorStyle = .singleLine
-               }
+            tableView.separatorStyle = .none
+        } else {
+            tableView.separatorStyle = .singleLine
+        }
         
         colorsAndEmojisCollectionView.dataSource = self
         colorsAndEmojisCollectionView.delegate = self
@@ -416,6 +416,7 @@ extension ActivityViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        
         guard let view = collectionView.dequeueReusableSupplementaryView(
             ofKind: kind,
             withReuseIdentifier: ColorsAndEmojisSupplementaryView.reuseIdentifier,
@@ -452,17 +453,7 @@ extension ActivityViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        let indexPath = IndexPath(row: 0, section: section)
-        let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader,
-                                             at: indexPath)
-        return headerView.systemLayoutSizeFitting(
-            CGSize(
-                width: collectionView.frame.width,
-                height: UIView.layoutFittingExpandedSize.height
-            ),
-            withHorizontalFittingPriority: .required,
-            verticalFittingPriority: .fittingSizeLevel
-        )
+        CGSize(width: collectionView.bounds.width, height: 18)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

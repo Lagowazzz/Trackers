@@ -14,6 +14,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
     private let trackerStore = TrackerStore()
     private let trackerRecordStore = TrackerRecordStore()
     private let trackerCategoryStore = TrackerCategoryStore()
+    private var currentFilter: String?
     
     private lazy var datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
@@ -57,6 +58,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(TrackersCollectionViewCell.self, forCellWithReuseIdentifier: "TrackerCell")
         collectionView.register(TrackerSupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: TrackerSupplementaryView.reuseIdentifier)
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 66, right: 0)
         return collectionView
     }()
     
@@ -68,6 +70,17 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
         whatsUpLabel.font = .systemFont(ofSize: 12)
         whatsUpLabel.translatesAutoresizingMaskIntoConstraints = false
         return whatsUpLabel
+    }()
+    
+    private lazy var filtersButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = .color3
+        button.setTitle(NSLocalizedString("filters.title", comment: ""), for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 17)
+        button.layer.cornerRadius = 16
+        button.addTarget(self, action: #selector(pushFiltersButton), for: .touchUpInside)
+        return button
     }()
     
     private let noResultImageView: UIImageView = {
@@ -91,6 +104,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
         view.backgroundColor = .spWhite
         edgesForExtendedLayout = .all
         
+        filtersButton.isHidden = true
         setupNavigationBar()
         setupConstraints()
         currentDate = Date()
@@ -106,10 +120,21 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
         loadAndFilterData()
         trackerStore.setupDelegate(self)
     }
-    
+   
     @objc private func dateChanged(_ picker: UIDatePicker) {
         currentDate = picker.date
         filterVisibleCategories(for: currentDate)
+    }
+    
+    @objc private func pushFiltersButton() {
+        let viewController = FilterViewController()
+        viewController.delegate = self
+        if let currentFilter = currentFilter {
+            if currentFilter == NSLocalizedString("Completed", comment: "") || currentFilter == NSLocalizedString("Not completed", comment: "") {
+                viewController.currentFilter = currentFilter
+            }
+        }
+        self.present(viewController, animated: true)
     }
     
     @objc private func plusButtonDidTap() {
@@ -167,13 +192,14 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
         view.addSubview(starImageView)
         view.addSubview(noResultImageView)
         view.addSubview(noResultLabel)
+        view.addSubview(filtersButton)
         
         NSLayoutConstraint.activate([
             
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -67),
             
             emptyView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             emptyView.bottomAnchor.constraint(equalTo: collectionView.topAnchor),
@@ -194,10 +220,15 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
             noResultImageView.heightAnchor.constraint(equalToConstant: 80),
             
             noResultLabel.topAnchor.constraint(equalTo: noResultImageView.bottomAnchor, constant: 8),
-            noResultLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            noResultLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            filtersButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            filtersButton.widthAnchor.constraint(equalToConstant: 114),
+            filtersButton.heightAnchor.constraint(equalToConstant: 50),
+            filtersButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
         ])
     }
-    
+  
     private func tapGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapGesture.cancelsTouchesInView = false
@@ -242,8 +273,10 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
         if visibleCategories.isEmpty && (searchBar.searchBar.text?.isEmpty ?? true) {
             starImageVisibility(true)
             noResultImageVisibility(false)
+            filtersButton.isHidden = true
         } else {
             starImageVisibility(false)
+            filtersButton.isHidden = false
         }
     }
     
@@ -305,6 +338,31 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
             return []
         }
     }
+    
+    private func filterTrackersByCompletion(_ categories: [TrackerCategory], completed: Bool) -> [TrackerCategory] {
+        var filteredCategories: [TrackerCategory] = []
+        for category in categories {
+            let filteredTrackers = category.trackers.filter { tracker in
+                let trackerRecords = fetchRecords(for: tracker)
+                let isCompleted = trackerRecords.contains { record in
+                    return Calendar.current.isDate(record.date, inSameDayAs: currentDate)
+                }
+                return isCompleted == completed
+            }
+            if !filteredTrackers.isEmpty {
+                filteredCategories.append(TrackerCategory(title: category.title, trackers: filteredTrackers))
+            }
+        }
+        return filteredCategories
+    }
+    
+    private func filterCompletedTrackers(_ categories: [TrackerCategory]) -> [TrackerCategory] {
+        return filterTrackersByCompletion(categories, completed: true)
+    }
+    
+    private func filterNotCompletedTrackers(_ categories: [TrackerCategory]) -> [TrackerCategory] {
+        return filterTrackersByCompletion(categories, completed: false)
+    }
 }
 
 extension TrackersViewController: UICollectionViewDataSource {
@@ -349,9 +407,9 @@ extension TrackersViewController: UICollectionViewDataSource {
 
 extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        let indexPath = IndexPath(row: 0, section: section)
-        let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
-        
+        let headerView = TrackerSupplementaryView(frame: .zero)
+        let indexPath = IndexPath(item: 0, section: section)
+        headerView.titleLabel.text = "Заголовок для секции \(indexPath.section + 1)"
         return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width,
                                                          height: UIView.layoutFittingExpandedSize.height),
                                                   withHorizontalFittingPriority: .required,
@@ -501,6 +559,54 @@ extension TrackersViewController: TrackerStoreDelegate {
         collectionView.performBatchUpdates {
             collectionView.insertSections(update.addedSections)
             collectionView.insertItems(at: update.addedIndexPaths)
+        }
+    }
+}
+
+extension TrackersViewController: FilterViewControllerDelegate {
+    
+    func didSelectFilter(_ filter: String) {
+        currentFilter = filter
+        switch filter {
+        case NSLocalizedString("allTrackers.title", comment: ""):
+            visibleCategories = categories
+            collectionView.reloadData()
+        case NSLocalizedString("trackersForToday.title", comment: ""):
+            datePicker.date = Date()
+            currentDate = datePicker.date
+            filterVisibleCategories(for: currentDate)
+            collectionView.reloadData()
+        case NSLocalizedString("completed.title", comment: ""):
+            visibleCategories = filterCompletedTrackers(categories)
+            collectionView.reloadData()
+        case NSLocalizedString("notCompleted.title", comment: ""):
+            visibleCategories = filterNotCompletedTrackers(categories)
+            collectionView.reloadData()
+        default:
+            break
+        }
+        dismiss(animated: true)
+        updateEmptyState()
+    }
+    
+    func didDeselectFilter() {
+        self.currentFilter = nil
+        visibleCategories = categories
+        collectionView.reloadData()
+        dismiss(animated: true)
+        updateEmptyState()
+    }
+    
+    private func updateEmptyState() {
+        if visibleCategories.isEmpty {
+            if currentFilter == NSLocalizedString("completed.title", comment: "") || currentFilter == NSLocalizedString("notCompleted.title", comment: "") {
+                noResultImageVisibility(true)
+            } else {
+                starImageVisibility(true)
+            }
+        } else {
+            noResultImageVisibility(false)
+            starImageVisibility(false)
         }
     }
 }

@@ -38,11 +38,19 @@
 "deleteAlert.title" = "¿Estás seguro de que quieres eliminar el rastreador?";
 "deleteAlertAction.title" = "Borrar";
 "deleteAlertCancel.title" = "Cancelar";
+
 "pinned.title" = "Fijado";
 "pinAction.title" = "Alfiler";
 "unpinAction.title" = "Desprender";
+
 "editAction.title" = "Editar";
 "editTrackerMain.title" = "Editar un hábito";
+
+"allTrackers.title" = "Todos los rastreadores";
+"trackersForToday.title" = "Rastreadores para hoy";
+"completed.title" = "Terminado";
+"notCompleted.title" = "No completado";
+"filters.title" = "Filtros";
 
 "monday.title" = "Lunes";
 "tuesday.title" = "Martes";

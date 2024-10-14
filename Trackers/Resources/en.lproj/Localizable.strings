@@ -39,11 +39,20 @@
 "deleteAlert.title" = "Are you sure to delete this tracker?";
 "deleteAlertAction.title" = "Delete";
 "deleteAlertCancel.title" = "Cancel";
+
 "pinned.title" = "Fixed";
 "pinAction.title" = "Pin";
 "unpinAction.title" = "Unpin";
+
 "editAction.title" = "Edit";
 "editTrackerMain.title" = "Editing a Habit";
+
+"allTrackers.title" = "All trackers";
+"trackersForToday.title" = "Trackers for today";
+"completed.title" = "Completed";
+"notCompleted.title" = "Not completed";
+"filters.title" = "Filters";
+
 
 "monday.title" = "Monday";
 "tuesday.title" = "Tuesday";
@@ -60,9 +69,3 @@
 "fri.title" = "Fri";
 "sat.title" = "Sat";
 "sun.title" = "Sun";
-
-
-
-
-
-

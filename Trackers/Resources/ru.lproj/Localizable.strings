@@ -38,11 +38,19 @@
 "deleteAlert.title" = "Уверены, что хотите удалить трекер?";
 "deleteAlertAction.title" = "Удалить";
 "deleteAlertCancel.title" = "Отменить";
+
 "pinned.title" = "Закрепленные";
 "pinAction.title" = "Закрепить";
 "unpinAction.title" = "Открепить";
+
 "editAction.title" = "Редактировать";
 "editTrackerMain.title" = "Редактирование привычки";
+
+"allTrackers.title" = "Все трекеры";
+"trackersForToday.title" = "Трекеры на сегодня";
+"completed.title" = "Завершенные";
+"notCompleted.title" = "Не завершенные";
+"filters.title" = "Фильтры";
 
 "monday.title" = "Понедельник";
 "tuesday.title" = "Вторник";

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		690575EF2C9B16CB00BFEE90 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690575EE2C9B16AE00BFEE90 /* FilterViewController.swift */; };
 		693C6BCD2C179748006D0E53 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693C6BCC2C179748006D0E53 /* OnboardingViewController.swift */; };
 		693C6BCF2C18CC79006D0E53 /* AppSettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693C6BCE2C18CC79006D0E53 /* AppSettingsStore.swift */; };
 		693C6BD32C1A3351006D0E53 /* CategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693C6BD22C1A3351006D0E53 /* CategoryViewModel.swift */; };
@@ -58,6 +59,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		690575EE2C9B16AE00BFEE90 /* FilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
 		693C6BCC2C179748006D0E53 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		693C6BCE2C18CC79006D0E53 /* AppSettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsStore.swift; sourceTree = "<group>"; };
 		693C6BD22C1A3351006D0E53 /* CategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewModel.swift; sourceTree = "<group>"; };
@@ -185,6 +187,7 @@
 		69705AE72BF9A0BF00521FBE /* MainScreen */ = {
 			isa = PBXGroup;
 			children = (
+				690575EE2C9B16AE00BFEE90 /* FilterViewController.swift */,
 				69705AE82BF9A0E200521FBE /* TrackersViewController.swift */,
 				69705AEA2BF9A27F00521FBE /* TabBarController.swift */,
 				69705AEF2BF9A4F700521FBE /* AddNewTrackerViewController.swift */,
@@ -427,6 +430,7 @@
 				69705AF92BF9A66800521FBE /* TrackerRecord.swift in Sources */,
 				69705AF52BF9A61200521FBE /* Tracker.swift in Sources */,
 				69705AEB2BF9A27F00521FBE /* TabBarController.swift in Sources */,
+				690575EF2C9B16CB00BFEE90 /* FilterViewController.swift in Sources */,
 				69F672D72C04D0C900871B36 /* TrackerRecordStore.swift in Sources */,
 				69705AF02BF9A4F700521FBE /* AddNewTrackerViewController.swift in Sources */,
 				69705B0A2BF9AD7C00521FBE /* NewCategoryViewController.swift in Sources */,
