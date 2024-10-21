@@ -53,6 +53,11 @@
 "notCompleted.title" = "Not completed";
 "filters.title" = "Filters";
 
+"Perfect days.title" = "Perfect days";
+"Trackers completed.title" = "Trackers completed";
+"Average value.title" = "Average value";
+"Best period.title" = "Best period";
+
 
 "monday.title" = "Monday";
 "tuesday.title" = "Tuesday";

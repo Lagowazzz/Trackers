@@ -52,6 +52,11 @@
 "notCompleted.title" = "No completado";
 "filters.title" = "Filtros";
 
+"Perfect days.title" = "Días ideales";
+"Trackers completed.title" = "Rastreadores completados";
+"Average value.title" = "Valor medio";
+"Best period.title" = "Mejor periodo";
+
 "monday.title" = "Lunes";
 "tuesday.title" = "Martes";
 "wednesday.title" = "Miércoles";

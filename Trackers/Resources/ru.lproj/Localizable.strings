@@ -52,6 +52,11 @@
 "notCompleted.title" = "Не завершенные";
 "filters.title" = "Фильтры";
 
+"Perfect days.title" = "Идеальные дни";
+"Trackers completed.title" = "Трекеров завершено";
+"Average value.title" = "Среднее значениe";
+"Best period.title" = "Лучший период";
+
 "monday.title" = "Понедельник";
 "tuesday.title" = "Вторник";
 "wednesday.title" = "Среда";

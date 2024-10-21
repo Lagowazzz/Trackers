@@ -120,7 +120,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
         loadAndFilterData()
         trackerStore.setupDelegate(self)
     }
-   
+    
     @objc private func dateChanged(_ picker: UIDatePicker) {
         currentDate = picker.date
         filterVisibleCategories(for: currentDate)
@@ -228,7 +228,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
             filtersButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
         ])
     }
-  
+    
     private func tapGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapGesture.cancelsTouchesInView = false

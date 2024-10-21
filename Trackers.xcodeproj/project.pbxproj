@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		690575EF2C9B16CB00BFEE90 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690575EE2C9B16AE00BFEE90 /* FilterViewController.swift */; };
+		690576512CC6AAA400BFEE90 /* StatisticView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690576502CC6AA9900BFEE90 /* StatisticView.swift */; };
 		693C6BCD2C179748006D0E53 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693C6BCC2C179748006D0E53 /* OnboardingViewController.swift */; };
 		693C6BCF2C18CC79006D0E53 /* AppSettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693C6BCE2C18CC79006D0E53 /* AppSettingsStore.swift */; };
 		693C6BD32C1A3351006D0E53 /* CategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693C6BD22C1A3351006D0E53 /* CategoryViewModel.swift */; };
@@ -60,6 +61,7 @@
 
 /* Begin PBXFileReference section */
 		690575EE2C9B16AE00BFEE90 /* FilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
+		690576502CC6AA9900BFEE90 /* StatisticView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticView.swift; sourceTree = "<group>"; };
 		693C6BCC2C179748006D0E53 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		693C6BCE2C18CC79006D0E53 /* AppSettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsStore.swift; sourceTree = "<group>"; };
 		693C6BD22C1A3351006D0E53 /* CategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewModel.swift; sourceTree = "<group>"; };
@@ -202,6 +204,7 @@
 		69705AEE2BF9A3D400521FBE /* Statistic */ = {
 			isa = PBXGroup;
 			children = (
+				690576502CC6AA9900BFEE90 /* StatisticView.swift */,
 				69705AEC2BF9A30100521FBE /* StatisticViewController.swift */,
 			);
 			path = Statistic;
@@ -435,6 +438,7 @@
 				69705AF02BF9A4F700521FBE /* AddNewTrackerViewController.swift in Sources */,
 				69705B0A2BF9AD7C00521FBE /* NewCategoryViewController.swift in Sources */,
 				69705AD62BF99D1700521FBE /* SceneDelegate.swift in Sources */,
+				690576512CC6AAA400BFEE90 /* StatisticView.swift in Sources */,
 				69705B0C2BF9ADD100521FBE /* WeekTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
