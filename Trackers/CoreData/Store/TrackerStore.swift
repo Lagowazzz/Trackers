@@ -15,6 +15,7 @@ protocol TrackerStoreProtocol {
     func setupDelegate(_ delegate: TrackerStoreDelegate)
     func fetchTracker(_ trackerCoreData: TrackerCoreData) throws -> Tracker
     func addTracker(_ tracker: Tracker, toCategory category: TrackerCategory) throws
+    func pinTracker(_ tracker: Tracker) throws
 }
 
 final class TrackerStore: NSObject {
@@ -78,6 +79,7 @@ final class TrackerStore: NSObject {
         let color = uiColorMarshalling.color(from: colorString)
         let timeTable = WeekDay.weekDays(fromWeekDay: trackerCoreData.weekDays)
         let isIrregular = timeTable.isEmpty
+        let isPinned = trackerCoreData.isPinned
         
         return Tracker(
             id: idTracker,
@@ -85,10 +87,11 @@ final class TrackerStore: NSObject {
             color: color,
             emoji: emoji,
             timeTable: timeTable,
-            isIrregular: isIrregular
+            isIrregular: isIrregular,
+            isPinned: isPinned
         )
     }
-
+    
     private func addTracker(_ tracker: Tracker, to category: TrackerCategory) throws {
         let trackerCategoryCoreData = try trackerCategoryStore.fetchCategoryCoreData(for: category)
         let trackerCoreData = TrackerCoreData(context: context)
@@ -98,8 +101,19 @@ final class TrackerStore: NSObject {
         trackerCoreData.emoji = tracker.emoji
         trackerCoreData.weekDays = WeekDay.weekDay(fromWeekDays: tracker.timeTable)
         trackerCoreData.category = trackerCategoryCoreData
+        trackerCoreData.isPinned = tracker.isPinned
         
         try saveContext()
+    }
+    
+    private func saveContext() throws {
+        guard context.hasChanges else { return }
+        do {
+            try context.save()
+        } catch {
+            context.rollback()
+            throw error
+        }
     }
     
     func addCategoryIfNeeded(_ category: TrackerCategory) throws {
@@ -115,19 +129,40 @@ final class TrackerStore: NSObject {
         }
     }
     
-    private func saveContext() throws {
-        guard context.hasChanges else { return }
-        do {
-            try context.save()
-        } catch {
-            context.rollback()
-            throw error
+    func deleteTracker(_ tracker: Tracker) throws {
+        let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "idTracker == %@", tracker.id as CVarArg)
+        if let result = try context.fetch(fetchRequest).first {
+            context.delete(result)
+            try saveContext()
+        } else {
+            let userInfo: [String: Any] = [
+                NSLocalizedDescriptionKey: "Failed to delete tracker.",
+                NSLocalizedFailureReasonErrorKey: "Tracker with the specified ID was not found.",
+                "TrackerID": tracker.id
+            ]
+            throw NSError(domain: NSCocoaErrorDomain, code: NSManagedObjectValidationError, userInfo: userInfo)
         }
+    }
+    
+    func pinTracker(_ tracker: Tracker) throws {
+        let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "idTracker == %@", tracker.id as CVarArg)
+        if let result = try context.fetch(fetchRequest).first {
+            result.isPinned = !result.isPinned
+            try saveContext()
+        } else {
+            let userInfo: [String: Any] = [
+                NSLocalizedDescriptionKey: "Failed to pin tracker.",
+                NSLocalizedFailureReasonErrorKey: "Tracker with the specified ID was not found.",
+                "TrackerID": tracker.id
+            ]
+            throw NSError(domain: NSCocoaErrorDomain, code: NSManagedObjectValidationError, userInfo: userInfo)             }
     }
 }
 
 extension TrackerStore: NSFetchedResultsControllerDelegate {
-   
+    
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         delegate?.trackerStoreUpdate(
             TrackerStoreUpdate(

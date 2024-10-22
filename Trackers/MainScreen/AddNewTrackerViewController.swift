@@ -12,11 +12,11 @@ final class AddNewTrackerViewController: UIViewController {
     private lazy var regularButton: UIButton = {
         let regularButton = UIButton()
         regularButton.translatesAutoresizingMaskIntoConstraints = false
-        regularButton.backgroundColor = .black
+        regularButton.backgroundColor = .spBlack
         regularButton.layer.cornerRadius = 16
         regularButton.layer.masksToBounds = true
-        regularButton.setTitle("Привычка", for: .normal)
-        regularButton.setTitleColor(.white, for: .normal)
+        regularButton.setTitle(NSLocalizedString("regularButton.title", comment: ""), for: .normal)
+        regularButton.setTitleColor(.spWhite, for: .normal)
         regularButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         regularButton.addTarget(self, action: #selector(regularButtonDidTap), for: .touchUpInside)
         return regularButton
@@ -25,11 +25,11 @@ final class AddNewTrackerViewController: UIViewController {
     private lazy var noRegularButton: UIButton = {
         let noRegularButton = UIButton()
         noRegularButton.translatesAutoresizingMaskIntoConstraints = false
-        noRegularButton.backgroundColor = .black
+        noRegularButton.backgroundColor = .spBlack
         noRegularButton.layer.cornerRadius = 16
         noRegularButton.layer.masksToBounds = true
-        noRegularButton.setTitle("Нерегулярное событие", for: .normal)
-        noRegularButton.setTitleColor(.white, for: .normal)
+        noRegularButton.setTitle(NSLocalizedString("noRegularButton.title", comment: ""), for: .normal)
+        noRegularButton.setTitleColor(.spWhite, for: .normal)
         noRegularButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         noRegularButton.addTarget(self, action: #selector(noRegularButtonDidTap), for: .touchUpInside)
         return noRegularButton
@@ -46,7 +46,7 @@ final class AddNewTrackerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .spWhite
         setupNavigationBar()
         setupConstraints()
     }
@@ -81,7 +81,7 @@ final class AddNewTrackerViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
-        navigationItem.title = "Создание трекера"
+        navigationItem.title = NSLocalizedString("createTracker.title", comment: "")
     }
 }
 

@@ -16,7 +16,7 @@ final class ActivityViewController: UIViewController {
     
     private var weekTableViewController: WeekTableViewController?
     
-    private let cellsTableView = ["Категория", "Расписание"]
+    private let cellsTableView = [NSLocalizedString("categoryMain.title", comment: ""), NSLocalizedString("schedule.title", comment: "")]
     private var selectedWeekTable: [WeekDay] = []
     private var selectedCategory = String()
     private var activityType: ActivityType
@@ -43,12 +43,12 @@ final class ActivityViewController: UIViewController {
     private let textField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
+        textField.backgroundColor = .spGray
         textField.layer.cornerRadius = 16
         textField.layer.masksToBounds = true
         textField.font = UIFont.systemFont(ofSize: 17)
         textField.setupLeftPadding(16)
-        textField.placeholder = "Введите название трекера"
+        textField.placeholder = NSLocalizedString("getNameToTracker.title", comment: "")
         textField.clearButtonMode = .whileEditing
         textField.returnKeyType = .done
         textField.enablesReturnKeyAutomatically = true
@@ -62,8 +62,12 @@ final class ActivityViewController: UIViewController {
         tableView.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
         tableView.layer.cornerRadius = 16
         tableView.layer.masksToBounds = true
-        tableView.separatorStyle = .none
+        tableView.separatorStyle = .singleLine
+        tableView.separatorColor = .lightGray
+        tableView.tableHeaderView = UIView()
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         tableView.register(ActivityCell.self, forCellReuseIdentifier: ActivityCell.reuseIdentifier)
+        
         return tableView
     }()
     
@@ -79,9 +83,9 @@ final class ActivityViewController: UIViewController {
     private lazy var cancelButton: UIButton = {
         let cancelButton = UIButton()
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
-        cancelButton.backgroundColor = .white
+        cancelButton.backgroundColor = .spWhite
         cancelButton.setTitleColor(.red, for: .normal)
-        cancelButton.setTitle("Отменить", for: .normal)
+        cancelButton.setTitle(NSLocalizedString("cancelButton.title", comment: ""), for: .normal)
         cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         cancelButton.layer.cornerRadius = 16
         cancelButton.layer.masksToBounds = true
@@ -94,11 +98,11 @@ final class ActivityViewController: UIViewController {
     private lazy var createButton: UIButton = {
         let createButton = UIButton()
         createButton.translatesAutoresizingMaskIntoConstraints = false
-        createButton.backgroundColor = .black
+        createButton.backgroundColor = .spBlack
         createButton.layer.cornerRadius = 16
         createButton.layer.masksToBounds = true
-        createButton.setTitle("Создать", for: .normal)
-        createButton.setTitleColor(.white, for: .normal)
+        createButton.setTitle(NSLocalizedString("createButton.title", comment: ""), for: .normal)
+        createButton.setTitleColor(.spWhite, for: .normal)
         createButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         createButton.addTarget(self, action: #selector(didTapCreateButton), for: .touchUpInside)
         return createButton
@@ -122,7 +126,7 @@ final class ActivityViewController: UIViewController {
             collectionViewLayout: UICollectionViewFlowLayout()
         )
         colorsAndEmojisCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        colorsAndEmojisCollectionView.backgroundColor = .white
+        colorsAndEmojisCollectionView.backgroundColor = .spWhite
         colorsAndEmojisCollectionView.isScrollEnabled = false
         colorsAndEmojisCollectionView.register(
             ColorsAndEmojisCells.self,
@@ -147,8 +151,7 @@ final class ActivityViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = .white
+        view.backgroundColor = .spWhite
         setupNavBar()
         setupConstraints()
         createButton.isEnabled = false
@@ -157,6 +160,12 @@ final class ActivityViewController: UIViewController {
         textField.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
+        
+        if activityType == .nonRegular {
+            tableView.separatorStyle = .none
+        } else {
+            tableView.separatorStyle = .singleLine
+        }
         
         colorsAndEmojisCollectionView.dataSource = self
         colorsAndEmojisCollectionView.delegate = self
@@ -178,10 +187,11 @@ final class ActivityViewController: UIViewController {
             newTracker = Tracker(
                 id: UUID(),
                 name: trackerName,
-                color: selectedColor ?? .black,
+                color: selectedColor ?? .spBlack,
                 emoji: selectedEmoji ?? "🤷‍♂️",
                 timeTable: selectedWeekTable,
-                isIrregular: true
+                isIrregular: true,
+                isPinned: false
             )
         case .nonRegular:
             let currentDate = Date()
@@ -192,10 +202,11 @@ final class ActivityViewController: UIViewController {
             newTracker = Tracker(
                 id: UUID(),
                 name: trackerName,
-                color: selectedColor ?? .black,
+                color: selectedColor ?? .spBlack,
                 emoji: selectedEmoji ?? "🤷‍♂️",
                 timeTable: weekDayArray,
-                isIrregular: false
+                isIrregular: false,
+                isPinned: false
             )
         }
         
@@ -252,7 +263,7 @@ final class ActivityViewController: UIViewController {
     }
     
     private func setupNavBar() {
-        navigationItem.title = activityType == .regular ? "Новая привычка" : "Новое нерегулярное событие"
+        navigationItem.title = activityType == .regular ? NSLocalizedString("newHabit.title", comment: "") : NSLocalizedString("newIrregularEvent.title", comment: "")
     }
     
     private func setupSubTitle(_ subTitle: String?, forCellAt indexPath: IndexPath) {
@@ -288,7 +299,7 @@ final class ActivityViewController: UIViewController {
             createButton.isEnabled = isTrackerNameEntered && isWeekTableSelected
         }
         
-        createButton.backgroundColor = createButton.isEnabled ? .black : UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1)
+        createButton.backgroundColor = createButton.isEnabled ? .spBlack : UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1)
     }
 }
 
@@ -319,9 +330,14 @@ extension ActivityViewController: UITableViewDataSource {
         }
         
         cell.accessoryType = .disclosureIndicator
-        cell.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
-        cell.titleLabel.text = cellsTableView[indexPath.row]
-        
+        cell.backgroundColor = .spGray
+        if indexPath.row == 0 {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: .zero, right: 16)
+            cell.titleLabel.text = cellsTableView[indexPath.row]
+        } else {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: .zero, right: .greatestFiniteMagnitude)
+            cell.titleLabel.text = cellsTableView[indexPath.row]
+        }
         return cell
     }
     
@@ -400,6 +416,7 @@ extension ActivityViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        
         guard let view = collectionView.dequeueReusableSupplementaryView(
             ofKind: kind,
             withReuseIdentifier: ColorsAndEmojisSupplementaryView.reuseIdentifier,
@@ -411,7 +428,7 @@ extension ActivityViewController: UICollectionViewDataSource {
         if indexPath.section == 0 {
             view.colorAndEmojiLabel.text = "Emoji"
         } else if indexPath.section == 1 {
-            view.colorAndEmojiLabel.text = "Цвет"
+            view.colorAndEmojiLabel.text = NSLocalizedString("color.title", comment: "")
         }
         return view
     }
@@ -436,17 +453,7 @@ extension ActivityViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        let indexPath = IndexPath(row: 0, section: section)
-        let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader,
-                                             at: indexPath)
-        return headerView.systemLayoutSizeFitting(
-            CGSize(
-                width: collectionView.frame.width,
-                height: UIView.layoutFittingExpandedSize.height
-            ),
-            withHorizontalFittingPriority: .required,
-            verticalFittingPriority: .fittingSizeLevel
-        )
+        CGSize(width: collectionView.bounds.width, height: 18)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -461,7 +468,7 @@ extension ActivityViewController: UICollectionViewDelegateFlowLayout {
             if let cell = collectionView.cellForItem(at: indexPath) as? ColorsAndEmojisCells {
                 cell.layer.cornerRadius = 16
                 cell.layer.masksToBounds = true
-                cell.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 1)
+                cell.backgroundColor = .spGray
                 selectedEmoji = emojis[indexPath.row]
                 selectedEmojiIndex = indexPath.row
             }

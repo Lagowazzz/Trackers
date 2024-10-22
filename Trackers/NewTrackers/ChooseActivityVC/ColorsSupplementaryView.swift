@@ -8,7 +8,7 @@ final class ColorsAndEmojisSupplementaryView: UICollectionReusableView {
         let colorAndEmojiLabel = UILabel()
         colorAndEmojiLabel.translatesAutoresizingMaskIntoConstraints = false
         colorAndEmojiLabel.font = UIFont.systemFont(ofSize: 19, weight: .bold)
-        colorAndEmojiLabel.textColor = .black
+        colorAndEmojiLabel.textColor = .spBlack
         colorAndEmojiLabel.textAlignment = .left
         return colorAndEmojiLabel
     }()
