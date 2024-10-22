@@ -15,6 +15,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
     private let trackerRecordStore = TrackerRecordStore()
     private let trackerCategoryStore = TrackerCategoryStore()
     private var currentFilter: String?
+    private let analyticsService = AnalyticsService()
     
     private lazy var datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
@@ -121,12 +122,24 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
         trackerStore.setupDelegate(self)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+             super.viewDidAppear(animated)
+             analyticsService.reportEvent(event: "Opened TrackersViewController", parameters: ["event": "open", "screen": "Main"])
+         }
+
+         override func viewDidDisappear(_ animated: Bool) {
+             super.viewDidDisappear(animated)
+             analyticsService.reportEvent(event: "Closed TrackersViewController", parameters: ["event": "close", "screen": "Main"])
+         }
+    
     @objc private func dateChanged(_ picker: UIDatePicker) {
+        analyticsService.reportEvent(event: "Date picker date changed on TrackersViewController", parameters: ["event": "change", "screen": "Main", "item": "date_changed"])
         currentDate = picker.date
         filterVisibleCategories(for: currentDate)
     }
     
     @objc private func pushFiltersButton() {
+        analyticsService.reportEvent(event: "Did press the filters button on TrackersViewController", parameters: ["event": "click", "screen": "Main", "item": "filter"])
         let viewController = FilterViewController()
         viewController.delegate = self
         if let currentFilter = currentFilter {
@@ -138,6 +151,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
     }
     
     @objc private func plusButtonDidTap() {
+        analyticsService.reportEvent(event: "Add tracker button tapped on TrackersViewController", parameters: ["event": "click", "screen": "Main", "item": "add_track"])
         let addNewTrackerViewController = AddNewTrackerViewController()
         addNewTrackerViewController.delegate = self
         let addNewTrackerNavigationController = UINavigationController(rootViewController: addNewTrackerViewController)
@@ -145,6 +159,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
     }
     
     @objc private func searchTrackers(_ searchBar: UISearchBar) {
+        analyticsService.reportEvent(event: "Attempted searching for trackers on TrackersViewController", parameters: ["event": "search", "screen": "Main"])
         guard let searchText = searchBar.text, !searchText.isEmpty else {
             filterVisibleCategories(for: currentDate)
             return
@@ -427,6 +442,7 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
 extension TrackersViewController: TrackersCollectionViewCellDelegate {
     
     func deleteTracker(tracker: Tracker) {
+        analyticsService.reportEvent(event: "Selected delete option in tracker's context menu", parameters: ["event": "click", "screen": "Main", "item": "delete"])
         let actionList: UIAlertController = {
             let alert = UIAlertController()
             alert.title = NSLocalizedString("deleteAlert.title", comment: "")
@@ -451,6 +467,7 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
     }
     
     func completeTracker(id: UUID) {
+        analyticsService.reportEvent(event: "Marked tracker completed on TrackersViewController", parameters: ["event": "click", "screen": "Main", "item": "track"])
         guard currentDate <= Date() else {
             return
         }
@@ -461,6 +478,7 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
     }
     
     func noCompleteTracker(id: UUID) {
+        analyticsService.reportEvent(event: "Marked tracker not completed on TrackersViewController", parameters: ["event": "click", "screen": "Main", "item": "un_track"])
         let trackerRecord = TrackerRecord(id: id, date: selectedDate())
         try? trackerRecordStore.deleteRecord(with: trackerRecord.id, by: trackerRecord.date)
         collectionView.reloadData()
@@ -488,6 +506,7 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
     }
     
     func pinTracker(tracker: Tracker) {
+        analyticsService.reportEvent(event: "Pinned or unpinned tracker on TrackersViewController", parameters: ["event": "click", "screen": "Main"])
         do {
             try trackerStore.pinTracker(tracker)
             loadAndFilterData()
@@ -497,6 +516,7 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
     }
     
     func editTracker(tracker: Tracker) {
+        analyticsService.reportEvent(event: "Selected edit option in tracker's context menu", parameters: ["event": "click", "screen": "Main", "item": "edit"])
         let viewController = EditTrackerViewController(activityType: .regular)
         viewController.tracker = tracker
         let navigationController = UINavigationController(rootViewController: viewController)

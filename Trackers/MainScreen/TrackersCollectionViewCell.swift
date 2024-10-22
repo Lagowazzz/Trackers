@@ -18,7 +18,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     private var trackerID: UUID?
     private var indexPath: IndexPath?
     private var isPinned: Bool = false
-    
+    private let analyticsService = AnalyticsService()
     
     private let trackerView: UIView = {
         let trackerView = UIView()
@@ -213,6 +213,8 @@ extension TrackersCollectionViewCell: UIContextMenuInteractionDelegate {
             identifier: nil,
             previewProvider: nil,
             actionProvider: { _ in
+                
+                self.analyticsService.reportEvent(event: "Did tap tracker cell", parameters: ["event": "click", "screen": "Main", "item": "cell"])
                 
                 let pinAction = UIAction(title: self.isPinned ? NSLocalizedString("unpinAction.title", comment: "") : NSLocalizedString("pinAction.title", comment: "")) { [weak self] _ in
                     guard let trackerID = self?.trackerID,
