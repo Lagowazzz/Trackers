@@ -86,6 +86,10 @@ final class AddNewTrackerViewController: UIViewController {
 }
 
 extension AddNewTrackerViewController: ActivityViewControllerDelegate {
+    func updateTracker(tracker: Tracker) {
+        
+    }
+    
     func createTracker(tracker: Tracker, categoryTitle: String) {
         delegate?.createdTracker(tracker: tracker, categoryTitle: categoryTitle)
         dismiss(animated: true)

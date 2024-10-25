@@ -143,7 +143,7 @@ final class TrackerRecordStore: NSObject, TrackerRecordStoreProtocol {
     private func fetchSortedRecords() -> [[String: Any]] {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "TrackerRecordCoreData")
         request.returnsObjectsAsFaults = false
-        request.propertiesToGroupBy = ["date"]
+        request.propertiesToGroupBy = ["trackerID", "date"]
         
         let keyPathExp = NSExpression(forKeyPath: "date")
         let expression = NSExpression(forFunction: "count:", arguments: [keyPathExp])
@@ -153,7 +153,7 @@ final class TrackerRecordStore: NSObject, TrackerRecordStoreProtocol {
         countDesc.name = "count"
         countDesc.expressionResultType = .integer64AttributeType
         
-        request.propertiesToFetch = ["date", countDesc]
+        request.propertiesToFetch = ["trackerID", "date", countDesc]
         request.resultType = .dictionaryResultType
         
         do {

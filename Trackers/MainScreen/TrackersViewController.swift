@@ -9,6 +9,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
     private var categories: [TrackerCategory] = []
     private var visibleCategories: [TrackerCategory] = []
     var completedTrackers: [TrackerRecord] = []
+    var trackers: [Tracker] = []
     var currentDate: Date = .init()
     
     private let trackerStore = TrackerStore()
@@ -16,6 +17,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
     private let trackerCategoryStore = TrackerCategoryStore()
     private var currentFilter: String?
     private let analyticsService = AnalyticsService()
+    private var editTrackerViewController = EditTrackerViewController(activityType: .nonRegular)
     
     private lazy var datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
@@ -120,6 +122,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
         searchBar.searchBar.delegate = self
         loadAndFilterData()
         trackerStore.setupDelegate(self)
+        editTrackerViewController.delegate = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -304,7 +307,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate, 
         }
     }
     
-    private func filterVisibleCategories(for selectedDate: Date) {
+    func filterVisibleCategories(for selectedDate: Date) {
         let selectedWeekday = Calendar.current.component(.weekday, from: selectedDate)
         
         var newVisibleCategories: [TrackerCategory] = []
@@ -517,7 +520,8 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
     
     func editTracker(tracker: Tracker) {
         analyticsService.reportEvent(event: "Selected edit option in tracker's context menu", parameters: ["event": "click", "screen": "Main", "item": "edit"])
-        let viewController = EditTrackerViewController(activityType: .regular)
+        let viewController = editTrackerViewController
+        editTrackerViewController.delegate = self
         viewController.tracker = tracker
         let navigationController = UINavigationController(rootViewController: viewController)
         present(navigationController, animated: true)
@@ -628,5 +632,13 @@ extension TrackersViewController: FilterViewControllerDelegate {
             noResultImageVisibility(false)
             starImageVisibility(false)
         }
+    }
+}
+
+extension TrackersViewController: EditTrackerViewControllerDelegate {
+    func didUpdateTracker(_ tracker: Tracker) {
+        collectionView.reloadData()
+        loadAndFilterData()
+        filterVisibleCategories(for: currentDate)
     }
 }

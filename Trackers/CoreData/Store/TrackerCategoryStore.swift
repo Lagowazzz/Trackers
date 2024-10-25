@@ -63,7 +63,7 @@ final class TrackerCategoryStore: NSObject {
         super.init()
     }
     
-    private func saveContext() throws {
+     func saveContext() throws {
         guard context.hasChanges else { return }
         do {
             try context.save()
@@ -121,7 +121,7 @@ final class TrackerCategoryStore: NSObject {
         }
     }
     
-    private func addNewCategory(_ category: TrackerCategory) throws {
+     func addNewCategory(_ category: TrackerCategory) throws {
         try checkTitle(with: category.title)
         let categoryCoreData = TrackerCategoryCoreData(context: context)
         categoryCoreData.categoryTitle = category.title

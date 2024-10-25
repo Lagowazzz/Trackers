@@ -16,6 +16,7 @@ protocol TrackerStoreProtocol {
     func fetchTracker(_ trackerCoreData: TrackerCoreData) throws -> Tracker
     func addTracker(_ tracker: Tracker, toCategory category: TrackerCategory) throws
     func pinTracker(_ tracker: Tracker) throws
+    func updateTracker(_ tracker: Tracker) throws
 }
 
 final class TrackerStore: NSObject {
@@ -106,9 +107,31 @@ final class TrackerStore: NSObject {
         try saveContext()
     }
     
-    private func saveContext() throws {
+    func updateTracker(_ tracker: Tracker) throws {
+        let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "idTracker == %@", tracker.id as CVarArg)
+        
+        if let result = try context.fetch(fetchRequest).first {
+            result.name = tracker.name
+            result.color = uiColorMarshalling.hexString(from: tracker.color)
+            result.emoji = tracker.emoji
+            result.weekDays = WeekDay.weekDay(fromWeekDays: tracker.timeTable)
+            result.isPinned = tracker.isPinned
+            
+            try saveContext()
+        } else {
+            let userInfo: [String: Any] = [
+                NSLocalizedDescriptionKey: "Failed to update tracker.",
+                NSLocalizedFailureReasonErrorKey: "Tracker with the specified ID was not found.",
+                "TrackerID": tracker.id
+            ]
+            throw NSError(domain: NSCocoaErrorDomain, code: NSManagedObjectValidationError, userInfo: userInfo)
+        }
+    }
+
+     func saveContext() throws {
         guard context.hasChanges else { return }
-        do {
+        do { 
             try context.save()
         } catch {
             context.rollback()
@@ -157,7 +180,8 @@ final class TrackerStore: NSObject {
                 NSLocalizedFailureReasonErrorKey: "Tracker with the specified ID was not found.",
                 "TrackerID": tracker.id
             ]
-            throw NSError(domain: NSCocoaErrorDomain, code: NSManagedObjectValidationError, userInfo: userInfo)             }
+            throw NSError(domain: NSCocoaErrorDomain, code: NSManagedObjectValidationError, userInfo: userInfo)
+        }
     }
 }
 

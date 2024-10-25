@@ -1,6 +1,8 @@
 import UIKit
 
-
+protocol EditTrackerViewControllerDelegate: AnyObject {
+    func didUpdateTracker(_ tracker: Tracker)
+}
 
 final class EditTrackerViewController: UIViewController {
     
@@ -10,7 +12,9 @@ final class EditTrackerViewController: UIViewController {
     }
     
     var tracker: Tracker?
-    
+    private let trackerStore = TrackerStore()
+    private let trackerCategoryStore = TrackerCategoryStore()
+    private var categories: [TrackerCategory] = []
     private var selectedWeekdays: [Int: Bool] = [:]
     
     private lazy var completedDays: UILabel = {
@@ -22,7 +26,7 @@ final class EditTrackerViewController: UIViewController {
         return label
     }()
     
-    weak var delegate: ActivityViewControllerDelegate?
+    weak var delegate: EditTrackerViewControllerDelegate?
     
     private var weekTableViewController: WeekTableViewController?
     
@@ -114,7 +118,7 @@ final class EditTrackerViewController: UIViewController {
         createButton.setTitle(NSLocalizedString("createButton.title", comment: ""), for: .normal)
         createButton.setTitleColor(.spWhite, for: .normal)
         createButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        createButton.addTarget(self, action: #selector(didTapCreateButton), for: .touchUpInside)
+        createButton.addTarget(self, action: #selector(didTapSaveButton), for: .touchUpInside)
         return createButton
     }()
     
@@ -187,44 +191,27 @@ final class EditTrackerViewController: UIViewController {
     
     @objc private func didTapCancelButton() {
         dismiss(animated: true)
-        delegate?.cancelCreateTracker()
     }
     
-    @objc private func didTapCreateButton() {
+    @objc private func didTapSaveButton() {
         guard let trackerName = textField.text, !trackerName.isEmpty else { return }
-        let newTracker: Tracker
         
-        switch activityType {
-        case .regular:
-            newTracker = Tracker(
-                id: UUID(),
-                name: trackerName,
-                color: selectedColor ?? .spBlack,
-                emoji: selectedEmoji ?? "🤷‍♂️",
-                timeTable: selectedWeekTable,
-                isIrregular: true,
-                isPinned: false
-            )
-        case .nonRegular:
-            let currentDate = Date()
-            let currentWeekday = Calendar.current.component(.weekday, from: currentDate)
-            let newWeekTable = WeekTable(value: WeekDay(rawValue: currentWeekday) ?? .sunday, isActive: true)
-            let weekTableArray = [newWeekTable]
-            let weekDayArray = weekTableArray.map { $0.value }
-            newTracker = Tracker(
-                id: UUID(),
-                name: trackerName,
-                color: selectedColor ?? .spBlack,
-                emoji: selectedEmoji ?? "🤷‍♂️",
-                timeTable: weekDayArray,
-                isIrregular: false,
-                isPinned: false
-            )
+        let updatedTracker = Tracker(
+            id: tracker?.id ?? UUID(),
+            name: trackerName,
+            color: selectedColor ?? tracker?.color ?? .spBlack,
+            emoji: selectedEmoji ?? tracker?.emoji ?? "🤷‍♂️",
+            timeTable: selectedWeekTable.isEmpty ? tracker?.timeTable ?? [] : selectedWeekTable,
+            isIrregular: activityType == .nonRegular,
+            isPinned: tracker?.isPinned ?? false
+        )
+        do {
+            try trackerStore.updateTracker(updatedTracker)
+            delegate?.didUpdateTracker(updatedTracker)
+            dismiss(animated: true)
+        } catch {
+            print("Ошибка при обновлении трекера: \(error)")
         }
-        
-        delegate?.createTracker(tracker: newTracker, categoryTitle: selectedCategory)
-        dismiss(animated: true)
-        delegate?.cancelCreateTracker()
     }
     
     private func setupConstraints() {
@@ -470,17 +457,7 @@ extension EditTrackerViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        let indexPath = IndexPath(row: 0, section: section)
-        let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader,
-                                             at: indexPath)
-        return headerView.systemLayoutSizeFitting(
-            CGSize(
-                width: collectionView.frame.width,
-                height: UIView.layoutFittingExpandedSize.height
-            ),
-            withHorizontalFittingPriority: .required,
-            verticalFittingPriority: .fittingSizeLevel
-        )
+        CGSize(width: collectionView.bounds.width, height: 18)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
