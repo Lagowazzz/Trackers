@@ -18,38 +18,38 @@ enum WeekDay: Int, CaseIterable {
     var value: String {
         switch self {
         case .monday:
-            return "Понедельник"
+            return NSLocalizedString("monday.title", comment: "")
         case .tuesday:
-            return "Вторник"
+            return NSLocalizedString("tuesday.title", comment: "")
         case .wednesday:
-            return "Среда"
+            return NSLocalizedString("wednesday.title", comment: "")
         case .thursday:
-            return "Четверг"
+            return NSLocalizedString("thursday.title", comment: "")
         case .friday:
-            return "Пятница"
+            return NSLocalizedString("friday.title", comment: "")
         case .saturday:
-            return "Суббота"
+            return NSLocalizedString("saturday.title", comment: "")
         case .sunday:
-            return "Воскресение"
+            return NSLocalizedString("sunday.title", comment: "")
         }
     }
     
     var abb: String {
         switch self {
         case .monday:
-            return "Пн"
+            return NSLocalizedString("mon.title", comment: "")
         case .tuesday:
-            return "Вт"
+            return NSLocalizedString("tue.title", comment: "")
         case .wednesday:
-            return "Ср"
+            return NSLocalizedString("wed.title", comment: "")
         case .thursday:
-            return "Чт"
+            return NSLocalizedString("thu.title", comment: "")
         case .friday:
-            return "Пт"
+            return NSLocalizedString("fri.title", comment: "")
         case .saturday:
-            return "Сб"
+            return NSLocalizedString("sat.title", comment: "")
         case .sunday:
-            return "Вс"
+            return NSLocalizedString("sun.title", comment: "")
         }
     }
     
@@ -60,7 +60,7 @@ enum WeekDay: Int, CaseIterable {
         }
         return weekDay
     }
-
+    
     static func weekDays(fromWeekDay value: Int16) -> [WeekDay] {
         return WeekDay.allCases.filter { value & (1 << $0.rawValue) != 0 }
     }

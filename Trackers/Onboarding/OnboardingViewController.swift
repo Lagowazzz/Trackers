@@ -13,8 +13,8 @@ final class OnboardingViewController: UIPageViewController, UIPageViewController
     }
     
     private lazy var pages: [UIViewController] = {
-        let page1 = OnboardingSetupPageViewController(imageName: "blue", text: "Отслеживайте только\n то, что хотите")
-        let page2 = OnboardingSetupPageViewController(imageName: "red", text: "Даже если это\n не литры воды и йога")
+        let page1 = OnboardingSetupPageViewController(imageName: "blue", text: NSLocalizedString("blueLabel.title", comment: ""))
+        let page2 = OnboardingSetupPageViewController(imageName: "red", text: NSLocalizedString("redLabel.title", comment: ""))
         return [page1, page2]
     }()
     
@@ -23,7 +23,7 @@ final class OnboardingViewController: UIPageViewController, UIPageViewController
         doneButton.layer.cornerRadius = 16
         doneButton.layer.masksToBounds = true
         doneButton.translatesAutoresizingMaskIntoConstraints = false
-        doneButton.setTitle("Вот это технологии!", for: .normal)
+        doneButton.setTitle(NSLocalizedString("doneButton.title", comment: ""), for: .normal)
         doneButton.setTitleColor(.white, for: .normal)
         doneButton.titleLabel?.font = .systemFont(ofSize: 16)
         doneButton.backgroundColor = .black

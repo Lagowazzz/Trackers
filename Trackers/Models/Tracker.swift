@@ -7,4 +7,5 @@ struct Tracker {
     let emoji: String
     let timeTable: [WeekDay]
     let isIrregular: Bool
+    let isPinned: Bool
 }

@@ -1,0 +1,76 @@
+
+
+"blueLabel.title" = "Track only what you want";
+"redLabel.title" = "Even if it's not liters of water and yoga";
+"doneButton.title" = "Wow, technologies!";
+
+"tabBarTrackers.title" = "Trackers";
+"tabBarStatistic.title" = "Statistic";
+
+"searchBarPlaceholder.title" = "Search";
+"searchBarCancelButton.title" = "Cancel";
+
+"whatsUp.title" = "What will we track?";
+"noResult.title" = "Nothing found";
+
+"regularButton.title" = "Habit";
+"noRegularButton.title" =  "Irregular event";
+"createTracker.title" = "Creating a tracker";
+
+"nothingToAnalyze.title" = "There is nothing to analyze yet";
+
+"getCategoryName.title" = "Enter category name";
+"categoryDoneButton.title" = "Done";
+"newCategoryMain.title" = "New category";
+
+"category.title" = "Habits and events can be combined by meaning";
+"addCategory.title" = "Add category";
+"categoryMain.title" = "Category";
+
+"schedule.title" = "Schedule";
+"getNameToTracker.title" = "Enter tracker name";
+"cancelButton.title" = "Cancel";
+"createButton.title" = "Create";
+"newHabbit.title" = "New habit";
+"newIrregularEvent.title" = "New irregular event";
+"color.title" = "Color";
+
+"deleteAction.title" = "Delete";
+"deleteAlert.title" = "Are you sure to delete this tracker?";
+"deleteAlertAction.title" = "Delete";
+"deleteAlertCancel.title" = "Cancel";
+
+"pinned.title" = "Fixed";
+"pinAction.title" = "Pin";
+"unpinAction.title" = "Unpin";
+
+"editAction.title" = "Edit";
+"editTrackerMain.title" = "Editing a Habit";
+
+"allTrackers.title" = "All trackers";
+"trackersForToday.title" = "Trackers for today";
+"completed.title" = "Completed";
+"notCompleted.title" = "Not completed";
+"filters.title" = "Filters";
+
+"Perfect days.title" = "Perfect days";
+"Trackers completed.title" = "Trackers completed";
+"Average value.title" = "Average value";
+"Best period.title" = "Best period";
+
+
+"monday.title" = "Monday";
+"tuesday.title" = "Tuesday";
+"wednesday.title" = "Wednesday";
+"thursday.title" = "Thursday";
+"friday.title" = "Friday";
+"saturday.title" = "Saturday";
+"sunday.title" = "Sunday";
+
+"mon.title" = "Mon";
+"tue.title" = "Tue";
+"wed.title" = "Wed";
+"thu.title" = "Thu";
+"fri.title" = "Fri";
+"sat.title" = "Sat";
+"sun.title" = "Sun";

@@ -12,12 +12,13 @@ final class NewCategoryViewController: UIViewController {
     private let textField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
+        textField.backgroundColor = .spGray
         textField.layer.cornerRadius = 16
         textField.layer.masksToBounds = true
         textField.font = UIFont.systemFont(ofSize: 17)
+        textField.textColor = .spBlack
         textField.setupLeftPadding(16)
-        textField.placeholder = "Введите название категории"
+        textField.placeholder = NSLocalizedString("getCategoryName.title", comment: "")
         textField.clearButtonMode = .whileEditing
         textField.returnKeyType = .done
         textField.enablesReturnKeyAutomatically = true
@@ -28,11 +29,11 @@ final class NewCategoryViewController: UIViewController {
     private lazy var doneButton: UIButton = {
         let doneButton = UIButton()
         doneButton.translatesAutoresizingMaskIntoConstraints = false
-        doneButton.backgroundColor = .black
+        doneButton.backgroundColor = .spBlack
         doneButton.layer.cornerRadius = 16
         doneButton.layer.masksToBounds = true
-        doneButton.setTitle("Готово", for: .normal)
-        doneButton.setTitleColor(.white, for: .normal)
+        doneButton.setTitle(NSLocalizedString("categoryDoneButton.title", comment: ""), for: .normal)
+        doneButton.setTitleColor(.spWhite, for: .normal)
         doneButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         doneButton.addTarget(self, action: #selector(didTapDoneButton), for: .touchUpInside)
         return doneButton
@@ -40,7 +41,7 @@ final class NewCategoryViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .spWhite
         setupNavBar()
         setupConstraints()
         doneButton.isEnabled = false
@@ -76,7 +77,7 @@ final class NewCategoryViewController: UIViewController {
     }
     
     private func setupNavBar() {
-        navigationItem.title = "Новая категория"
+        navigationItem.title = NSLocalizedString("newCategoryMain.title", comment: "")
     }
 }
 
@@ -84,7 +85,7 @@ extension NewCategoryViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if let text = textField.text, !text.isEmpty {
             doneButton.isEnabled = true
-            doneButton.backgroundColor = .black
+            doneButton.backgroundColor = .spBlack
         } else {
             doneButton.isEnabled = false
             doneButton.backgroundColor = UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1)
